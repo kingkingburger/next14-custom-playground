@@ -14,6 +14,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "제목은 최소 5글자가 필요해요" }),
@@ -23,11 +25,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const NewPost = () => {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -37,14 +35,27 @@ const NewPost = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // toast(`카드가 생성되지 않았습니다.`, {
-    //   description: "카드 생성 에러",
-    //   action: {
-    //     label: "확인",
-    //     onClick: () => console.log("Undo"),
-    //   },
-    // });
+  const onSubmit = async (values: FormData) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/post`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      router.push(`/post/${data.id}`);
+    } else {
+      toast(`게시글이 생성되지 않았습니다.`, {
+        description: "게시글이 생성 에러",
+        action: {
+          label: "확인",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
   };
 
   return (
