@@ -2,16 +2,16 @@ import { randomUUID } from "node:crypto";
 import Link from "next/link";
 import { ModeToggle } from "@/components/dark-mode-toggle";
 
-export default function Home() {
-  const postContent = [];
-  for (let i = 0; i < 50; i++) {
-    postContent.push({
-      id: randomUUID(),
-      title: randomUUID(),
-      content: randomUUID(),
-      date: new Date(),
-    });
-  }
+interface PostType {
+  id: string;
+  title: string;
+  content: string;
+}
+
+export default async function Home() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/post`, {});
+
+  const postContent: PostType[] = (await response?.json()) || [];
 
   return (
     <div className="relative p-24 min-h-screen">
