@@ -24,6 +24,14 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+const errorToast = toast(`게시글이 생성되지 않았습니다.`, {
+  description: "게시글이 생성 에러",
+  action: {
+    label: "확인",
+    onClick: () => console.log("Undo"),
+  },
+});
+
 const NewPost = () => {
   const router = useRouter();
 
@@ -36,25 +44,26 @@ const NewPost = () => {
   });
 
   const onSubmit = async (values: FormData) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/post`, {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      errorToast;
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/post`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(values),
     });
 
     if (response.ok) {
       const data = await response.json();
-      router.push(`/post/${data.id}`);
+      router.push(`/api/post/id/${data.id}`);
     } else {
-      toast(`게시글이 생성되지 않았습니다.`, {
-        description: "게시글이 생성 에러",
-        action: {
-          label: "확인",
-          onClick: () => console.log("Undo"),
-        },
-      });
+      errorToast;
     }
   };
 
