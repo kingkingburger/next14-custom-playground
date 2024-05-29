@@ -18,8 +18,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  title: z.string().min(5, { message: "제목은 최소 5글자가 필요해요" }),
-  content: z.string().min(10, { message: "내용은 최소 10글자가 필요해요" }),
+  email: z.string().email({ message: "이메일 형식을 입력해주세요" }),
+  password: z.string().min(1, { message: "최소 1글자 입력해주세요" }),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -30,26 +30,34 @@ const LoginPage = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      content: "",
+      email: "",
+      password: "",
     },
   });
 
   const onSubmit = async (values: FormData) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/post`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER}/api/v1/auth/authentication`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
       },
-      body: JSON.stringify(values),
-    });
+    );
 
     if (response.ok) {
       const data = await response.json();
-      router.push(`/post/${data.id}`);
+
+      // 토큰을 localStorage에 저장
+      if (data.data) {
+        localStorage.setItem("token", data.data);
+      }
+      router.push(`/`);
     } else {
       toast(`로그인 실패`, {
-        description: "로그인이 되지 않았습니다",
+        description: "로그인이 되지 않았습니다 입력정보를 다시 확인해주세요",
         action: {
           label: "확인",
           onClick: () => console.log("Undo"),
@@ -60,18 +68,19 @@ const LoginPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">새로운 글</h1>
+      <h1 className="text-3xl font-bold mb-6">로그인</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="title"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>제목</FormLabel>
+                <FormLabel>이메일</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="제목을 입력해주세요"
+                    type="email"
+                    placeholder="이메일을 입력해주세요"
                     className="border-4"
                     {...field}
                   />
@@ -82,14 +91,15 @@ const LoginPage = () => {
           />
           <FormField
             control={form.control}
-            name="content"
+            name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>내용</FormLabel>
+                <FormLabel>비밀번호</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="내용을 작성해주세요"
-                    className="border-4 h-80"
+                  <Input
+                    type="password"
+                    placeholder="비밀번호를 입력해주세요"
+                    className="border-4"
                     {...field}
                   />
                 </FormControl>
@@ -97,7 +107,7 @@ const LoginPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">로그인</Button>
         </form>
       </Form>
     </div>
