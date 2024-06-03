@@ -45,7 +45,7 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-gray-900  p-4">
+    <div className="bg-gray-900 p-4">
       <div>
         <h1>Count: {count}</h1>
         <button onClick={increaseCount}>Increase Count</button>
@@ -54,9 +54,9 @@ export default function Home() {
       <main className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
         {postContent.map((post) => (
           <Link key={post.id} href={`post/${post.id}`} passHref>
-            <div className="bg-gray-800 p-4 rounded shadow transition transform hover:bg-gray-700 hover:scale-105">
+            <div className="bg-gray-800 p-4 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 h-64">
               <h2 className="text-white font-bold">{post.title}</h2>
-              <p className="text-gray-400">{post.content}</p>
+              <p className="text-gray-400 line-clamp-6">{post.content}</p>
             </div>
           </Link>
         ))}
