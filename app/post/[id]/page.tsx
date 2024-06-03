@@ -1,3 +1,6 @@
+import CommentPage from "@/components/comment/comment";
+import React from "react";
+
 interface PostIdPage {
   params: {
     id: string;
@@ -44,6 +47,7 @@ const postIdPage = async ({ params }: PostIdPage) => {
         </div>
         <div className="text-lg text-gray-300">{postContent.content}</div>
       </main>
+      <CommentPage />
     </div>
   );
 };
