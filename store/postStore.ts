@@ -27,8 +27,20 @@ const usePostStore = create<PostState>((set, get) => ({
         // Authorization: `Bearer ${token}`,
       },
     });
+    const postResultList = await response.json();
+    set({ postList: postResultList });
+  },
+
+  fetchPost: async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/post`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${token}`,
+      },
+    });
     const postResult = await response.json();
-    set({ postList: postResult });
+    set({ selectPost: postResult });
   },
 
   getPost: async (id: number) => {
