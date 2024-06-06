@@ -1,25 +1,28 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import usePostStore from "@/store/postStore";
+
 interface CommentIdPage {
   params: {
     id: string;
   };
 }
 
-export default async function CommentPage() {
-// { params }: CommentIdPage
-  // const token = localStorage.getItem("token");
-  // const response = await fetch(
-  //   `${process.env.NEXT_PUBLIC_SERVER}/api/post/id/${params.id}`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // Authorization: `Bearer ${token}`,
-  //     },
-  //   },
-  // );
+export default function CommentPage() {
+  const [isClient, setIsClient] = useState(false);
+  const params = useParams();
+  const { getPost, selectPost } = usePostStore();
 
-  // const postResult: PostType = (await response?.json()) || {};
-  // const postContent = postResult.data;
+  useEffect(() => {
+    setIsClient(true);
+    getPost(params?.id as string);
+  }, []);
+
+  if (!isClient) {
+    return null; // 클라이언트에서만 랜더링할 내용이 있다면 여기를 사용
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen p-4">

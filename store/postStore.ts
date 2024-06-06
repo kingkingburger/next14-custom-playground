@@ -1,18 +1,26 @@
 import { create } from "zustand";
 
 interface PostType {
-  id?: number;
+  message: string;
+  code: number;
+  data: PostData;
+}
+
+interface PostData {
+  id: string;
   title: string;
   content: string;
+  createdDate: string;
+  updatedDate: string;
 }
 
 interface PostState {
-  selectPost?: PostType | null;
-  postList: PostType[] | null;
+  selectPost?: PostData | null;
+  postList: PostData | PostData[] | null;
   fetchPosts: () => Promise<void>;
-  getPost: (id: number) => Promise<void>;
-  setList: (list: PostType[]) => void;
-  setSelectPost: (post: PostType) => void;
+  getPost: (id: string) => Promise<void>;
+  setList: (list: PostData[]) => void;
+  setSelectPost: (post: PostData) => void;
 }
 
 const usePostStore = create<PostState>((set, get) => ({
@@ -28,24 +36,12 @@ const usePostStore = create<PostState>((set, get) => ({
       },
     });
     const postResultList = await response.json();
-    set({ postList: postResultList });
+    set({ postList: postResultList.data });
   },
 
-  fetchPost: async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/post`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-    });
-    const postResult = await response.json();
-    set({ selectPost: postResult });
-  },
-
-  getPost: async (id: number) => {
+  getPost: async (id: string) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/post/${id}`,
+      `${process.env.NEXT_PUBLIC_SERVER}/api/post/id/${id}`,
       {
         method: "GET",
         headers: {
@@ -54,13 +50,13 @@ const usePostStore = create<PostState>((set, get) => ({
         },
       },
     );
-    const postResult = await response.json();
-    set({ selectPost: postResult });
+    const postResult = (await response.json()) as PostType;
+    set({ selectPost: postResult.data });
   },
 
-  setList: (list: PostType[]) => set({ postList: list }),
+  setList: (list: PostData[]) => set({ postList: list }),
 
-  setSelectPost: (post: PostType) => set({ selectPost: post }),
+  setSelectPost: (post: PostData) => set({ selectPost: post }),
 }));
 
 export default usePostStore;
