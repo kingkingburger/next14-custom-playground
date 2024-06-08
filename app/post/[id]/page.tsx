@@ -5,12 +5,6 @@ import CommentPage from "@/components/comment/comment";
 import usePostStore from "@/store/postStore";
 import { useParams } from "next/navigation";
 
-interface PostIdPageProps {
-  params: {
-    id: string;
-  };
-}
-
 export default function PostIdPageClient() {
   const [isClient, setIsClient] = useState(false);
   const params = useParams();
@@ -33,7 +27,7 @@ export default function PostIdPageClient() {
         </h1>
         <div className="flex justify-between items-center mb-4 text-gray-400">
           <span>ID: {selectPost?.id}</span>
-          {/* <span>{new Date(postContent?.createdDate).toLocaleDateString()}</span> */}
+          <span>{selectPost?.createdDate}</span>
         </div>
         <div className="text-lg text-gray-300">{selectPost?.content}</div>
       </main>

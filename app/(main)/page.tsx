@@ -4,7 +4,6 @@ import Link from "next/link";
 import useStore from "@/store/store";
 import { useEffect, useState } from "react";
 import usePostStore from "@/store/postStore";
-import { useCheckResult } from "@/store/resultStore";
 
 export interface PostType {
   id: string;
