@@ -12,7 +12,6 @@ export interface PostType {
 }
 
 export default function Home() {
-  const { count, increaseCount, resetCount } = useStore();
   const [isClient, setIsClient] = useState(false);
   const { fetchPosts, getPost, postList, selectPost } = usePostStore();
 
@@ -30,11 +29,6 @@ export default function Home() {
 
   return (
     <div className="bg-gray-900 p-4">
-      <div>
-        <h1>Count: {count}</h1>
-        <button onClick={increaseCount}>Increase Count</button>
-        <button onClick={resetCount}>Reset Count</button>
-      </div>
       <main className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
         {typedPostList?.map((post) => (
           <Link key={post.id} href={`post/${post.id}`} passHref>
