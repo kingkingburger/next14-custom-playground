@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="kr">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-gray-900`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
