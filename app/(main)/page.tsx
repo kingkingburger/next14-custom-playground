@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import usePostStore from "@/store/postStore";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export interface PostType {
   id: string;
@@ -12,19 +13,27 @@ export interface PostType {
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
-  const { fetchPosts, getPost, postList, selectPost } = usePostStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const { fetchPosts, postList } = usePostStore();
 
   useEffect(() => {
-    setIsClient(true);
-    fetchPostsAsync(); // 비동기 함수 호출
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        await fetchPosts();
+        setIsClient(true);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const fetchPostsAsync = async () => {
-    await fetchPosts();
-  };
-
-  if (!isClient) {
-    return null; // 클라이언트 에서만 랜더링할 내용이 있다면 여기를 사용
+  if (!isClient || isLoading) {
+    return <LoadingSpinner />; // 로딩 중일 때 표시할 내용
   }
 
   // postList가 PostType[] 타입임을 명시

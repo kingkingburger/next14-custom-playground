@@ -44,12 +44,6 @@ const NewPost = () => {
   });
 
   const onSubmit = async (values: FormData) => {
-    // TODO: [🟥고민필요] 글쓰기는 로그인 안한사람도 가능하게끔 수정
-    // const token = localStorage.getItem("token");
-    // if (token) {
-    //   errorToast;
-    // }
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/post`, {
       method: "POST",
       headers: {
