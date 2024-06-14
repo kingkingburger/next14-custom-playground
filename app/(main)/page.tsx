@@ -29,7 +29,7 @@ export default function Home() {
       try {
         await fetchPosts();
         setIsClient(true);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to fetch posts:", error.message);
       } finally {
         setIsLoading(false);
