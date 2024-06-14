@@ -1,49 +1,25 @@
 // page.tsx
-"use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import usePostStore from "@/store/postStore";
-import LoadingSpinner from "@/components/loading-spinner";
+import ApiService, { PostData } from "@/lib/fetch";
 
 export interface PostType {
   id: string;
   title: string;
   content: string;
 }
-export default function Home() {
-  const [isClient, setIsClient] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const { fetchPosts, postList } = usePostStore();
-  const hasFetchedData = useRef(false); // useRef로 fetchData 호출 상태를 저장
+export default async function Home() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/post`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: `Bearer ${token}`,
+    },
+  });
+  const apiService = new ApiService();
+  const postResultList = await apiService.fetchPosts();
 
-  useEffect(() => {
-    console.log("useEffect called");
-
-    if (hasFetchedData.current) return; // fetchData가 이미 호출되었으면 종료
-    hasFetchedData.current = true; // fetchData 호출 상태 업데이트
-
-    const fetchData = async () => {
-      console.log("fetchData called");
-      setIsLoading(true);
-      try {
-        await fetchPosts();
-        setIsClient(true);
-      } catch (error: any) {
-        console.error("Failed to fetch posts:", error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (!isClient || isLoading) {
-    return <LoadingSpinner />; // 로딩 중일 때 표시할 내용
-  }
-
-  const typedPostList = postList as PostType[];
+  const typedPostList = postResultList.data as PostData[];
 
   return (
     <div className="bg-gray-900 p-4">
