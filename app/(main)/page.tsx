@@ -9,13 +9,6 @@ export interface PostType {
   content: string;
 }
 export default async function Home() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/post`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
-    },
-  });
   const apiService = new ApiService();
   const postResultList = await apiService.fetchPosts();
 
@@ -23,6 +16,9 @@ export default async function Home() {
 
   return (
     <div className="bg-gray-900 p-4">
+      <h1 className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 p-4">
+        게시판
+      </h1>
       <main className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 p-4">
         {typedPostList?.map((post) => (
           <Link key={post.id} href={`post/${post.id}`} passHref>
