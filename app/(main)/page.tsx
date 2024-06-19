@@ -12,7 +12,7 @@ export default async function Home() {
   const apiService = new ApiService();
   const postResultList = await apiService.fetchPosts();
 
-  const typedPostList = postResultList.data as PostData[];
+  const typedPostList = postResultList as PostData[];
 
   return (
     <div className="bg-gray-900 p-4">

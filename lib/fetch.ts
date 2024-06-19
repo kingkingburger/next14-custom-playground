@@ -1,3 +1,5 @@
+import { FormData } from "@/app/new-post/page";
+
 interface PostType {
   message: string;
   code: number;
@@ -12,13 +14,13 @@ export interface PostData {
   updatedDate: string;
 }
 class ApiService {
-  private serverUrl: string;
+  public readonly serverUrl: string;
 
   constructor() {
     this.serverUrl = process.env.NEXT_PUBLIC_SERVER || "";
   }
 
-  public async fetchPosts(): Promise<PostType> {
+  public async fetchPosts(): Promise<PostData[]> {
     try {
       const response = await fetch(`${this.serverUrl}/api/post`, {
         method: "GET",
@@ -27,6 +29,33 @@ class ApiService {
           // Authorization: `Bearer ${token}`,
         },
       });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error: any) {
+      console.error("Failed to fetch posts:", error.message);
+      throw error;
+    }
+  }
+
+  public async createPost(values: FormData) {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER}/api/post`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(values),
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
