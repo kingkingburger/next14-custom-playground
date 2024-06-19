@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ApiService from "@/lib/fetch";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "제목은 최소 5글자가 필요해요" }),
@@ -34,7 +35,13 @@ const errorToast = toast(`게시글이 생성되지 않았습니다.`, {
 });
 
 const NewPost = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
   const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -48,13 +55,17 @@ const NewPost = () => {
     const apiService = new ApiService();
     const response = await apiService.createPost(values);
 
-    if (response.ok) {
-      const data = await response.json();
+    if (response.code === 200) {
+      const data = await response.data;
       router.push(`/api/post/id/${data.id}`);
     } else {
       errorToast;
     }
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-8">
