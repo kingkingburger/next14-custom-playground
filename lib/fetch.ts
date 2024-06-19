@@ -45,6 +45,7 @@ class ApiService {
 
   public async createPost(values: FormData) {
     try {
+      console.log("동작함");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/post`,
         {

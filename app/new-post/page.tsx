@@ -57,7 +57,8 @@ const NewPost = () => {
 
     if (response.code === 200) {
       const data = await response.data;
-      router.push(`/api/post/id/${data.id}`);
+
+      router.push(`/post/${data.id}`);
     } else {
       errorToast;
     }
