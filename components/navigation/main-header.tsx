@@ -6,12 +6,12 @@ export default function MainHeader() {
     <div className="top-0 left-0 w-full z-50 bg-gray-800 p-4">
       <header className="text-white flex justify-between items-center max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold">
-          <Link
+          <a
             href="/"
             className="bg-teal-500 text-white px-4 py-2 rounded transition transform hover:bg-teal-400 hover:scale-105 hover:shadow-lg"
           >
             MHBoard
-          </Link>
+          </a>
         </h1>
         <div className="flex space-x-4">
           <input
