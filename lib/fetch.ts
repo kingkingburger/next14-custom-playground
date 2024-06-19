@@ -1,9 +1,10 @@
 import { FormData } from "@/app/new-post/page";
+import { revalidatePath, revalidateTag } from "next/cache";
 
-interface PostType {
+export interface PostResult<T> {
   message: string;
   code: number;
-  data: PostData | PostData[];
+  data: T;
 }
 
 export interface PostData {
@@ -20,7 +21,7 @@ class ApiService {
     this.serverUrl = process.env.NEXT_PUBLIC_SERVER || "";
   }
 
-  public async fetchPosts(): Promise<PostData[]> {
+  public async fetchPosts(): Promise<PostResult<PostData[]>> {
     try {
       const response = await fetch(`${this.serverUrl}/api/post`, {
         method: "GET",
@@ -28,14 +29,18 @@ class ApiService {
           "Content-Type": "application/json",
           // Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
+        next: {
+          // revalidate: 2,
+          // tags: ["main"],
+        },
       });
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
       throw error;
@@ -62,6 +67,32 @@ class ApiService {
 
       const data = await response.json();
       return data;
+    } catch (error: any) {
+      console.error("Failed to fetch posts:", error.message);
+      throw error;
+    }
+  }
+
+  public async getPostById(id: string): Promise<PostResult<PostData>> {
+    try {
+      const response = await fetch(`${this.serverUrl}/api/post/id/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${token}`,
+        },
+        cache: "no-cache",
+        next: {
+          // revalidate: 2,
+          // tags: ["main"],
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
       throw error;
