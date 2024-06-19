@@ -10,7 +10,7 @@ export default function MainHeader() {
             href="/"
             className="bg-teal-500 text-white px-4 py-2 rounded transition transform hover:bg-teal-400 hover:scale-105 hover:shadow-lg"
           >
-            MHBaord
+            MHBoard
           </Link>
         </h1>
         <div className="flex space-x-4">
