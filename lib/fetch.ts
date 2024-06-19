@@ -29,7 +29,7 @@ class ApiService {
           "Content-Type": "application/json",
           // Authorization: `Bearer ${token}`,
         },
-        cache: "no-cache",
+        cache: "no-store",
         next: {
           // revalidate: 2,
           // tags: ["main"],
