@@ -35,7 +35,6 @@ class ApiService {
       }
 
       const data = await response.json();
-
       return data;
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
@@ -45,7 +44,6 @@ class ApiService {
 
   public async createPost(values: FormData) {
     try {
-      console.log("동작함");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/post`,
         {

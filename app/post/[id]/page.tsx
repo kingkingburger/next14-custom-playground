@@ -12,7 +12,6 @@ export default function PostIdPageClient() {
 
   useEffect(() => {
     setIsClient(true);
-    console.log("params?.id = ", params?.id);
     getPost(params?.id as string);
   }, []);
 

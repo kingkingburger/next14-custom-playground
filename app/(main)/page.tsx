@@ -11,9 +11,8 @@ export interface PostType {
 export default async function Home() {
   const apiService = new ApiService();
   const postResultList = await apiService.fetchPosts();
-
+  console.log("postResultList = ", postResultList);
   const typedPostList = postResultList as PostData[];
-
   return (
     <div className="bg-gray-900 p-4">
       <h1 className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 p-4">
