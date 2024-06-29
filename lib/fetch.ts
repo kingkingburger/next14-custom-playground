@@ -23,7 +23,7 @@ class ApiService {
 
   public async fetchPosts(): Promise<PostResult<PostData[]>> {
     try {
-      const response = await fetch(`${this.serverUrl}/api/post`, {
+      const response = await fetch(`${this.serverUrl}/post/feed`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -49,17 +49,14 @@ class ApiService {
 
   public async createPost(values: FormData) {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/post`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(values),
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/post`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify(values),
+      });
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
@@ -75,7 +72,7 @@ class ApiService {
 
   public async getPostById(id: string): Promise<PostResult<PostData>> {
     try {
-      const response = await fetch(`${this.serverUrl}/api/post/id/${id}`, {
+      const response = await fetch(`${this.serverUrl}/post/id/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
