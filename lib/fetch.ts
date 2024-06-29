@@ -13,7 +13,7 @@ export interface PostData {
   content: string;
   published: boolean;
   viewCount: number;
-  recommendedCount: number;
+  recommendCount: number;
   categoryId: number;
   userId: number;
   createdAt: string;

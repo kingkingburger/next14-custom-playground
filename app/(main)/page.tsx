@@ -3,6 +3,7 @@
 import Link from "next/link";
 import ApiService from "@/lib/fetch";
 import { formatDistanceToNow } from "date-fns";
+import { FaEye, FaThumbsUp, FaComment } from "react-icons/fa";
 
 export default async function Home() {
   const apiService = new ApiService();
@@ -25,15 +26,21 @@ export default async function Home() {
                 />
                 <div className="flex flex-col justify-between w-full">
                   <div>
-                    <h2 className="text-white font-bold">{post.title}</h2>
+                    <h2 className="text-white font-bold">{post.title} </h2>
                     <p className="text-gray-400">
                       {post.userId} ·{" "}
-                      {formatDistanceToNow(new Date(post.createdAt))}
+                      {formatDistanceToNow(new Date(post.createdAt))} 전
                     </p>
                   </div>
-                  <div className="flex items-center text-gray-400">
-                    <span className="mx-2">{post.viewCount} 조회수</span>
-                    <span className="mx-2">{post.recommendedCount} 좋아요</span>
+                  <div className="flex  items-center text-gray-400">
+                    <div className="mx-2 flex items-center space-x-1">
+                      <FaEye />
+                      <span>{post.viewCount}</span>
+                    </div>
+                    <div className="mx-2 flex items-center space-x-1">
+                      <FaThumbsUp />
+                      <span>{post.recommendCount}</span>
+                    </div>
                   </div>
                 </div>
               </div>
