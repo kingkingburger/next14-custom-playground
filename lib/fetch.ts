@@ -2,8 +2,8 @@ import { FormData } from "@/app/new-post/page";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export interface PostResult<T> {
-  message: string;
-  code: number;
+  statusCode: number;
+  timestamp: Date;
   data: T;
 }
 
@@ -11,8 +11,13 @@ export interface PostData {
   id: string;
   title: string;
   content: string;
-  createdDate: string;
-  updatedDate: string;
+  published: boolean;
+  viewCount: number;
+  recommendedCount: number;
+  categoryId: number;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 class ApiService {
   public readonly serverUrl: string;
