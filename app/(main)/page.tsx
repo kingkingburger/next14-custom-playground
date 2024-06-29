@@ -28,12 +28,12 @@ export default async function Home() {
                     <h2 className="text-white font-bold">{post.title}</h2>
                     <p className="text-gray-400">
                       {post.userId} ·{" "}
-                      {formatDistanceToNow(new Date(post.createdAt))} 전
+                      {formatDistanceToNow(new Date(post.createdAt))}
                     </p>
                   </div>
                   <div className="flex items-center text-gray-400">
-                    <span className="m-2">{post.viewCount} 조회수</span>
-                    <span className="m-2">{post.recommendedCount} 좋아요</span>
+                    <span className="mx-2">{post.viewCount} 조회수</span>
+                    <span className="mx-2">{post.recommendedCount} 좋아요</span>
                   </div>
                 </div>
               </div>
