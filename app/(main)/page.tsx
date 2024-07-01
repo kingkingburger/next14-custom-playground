@@ -31,9 +31,9 @@ export default async function Home() {
                   <h2 className="text-white font-bold">{post.title} </h2>
                   <div className="flex items-center text-gray-400">
                     <div className="mx-2 flex items-center space-x-1">
-                      {post.User.name}
+                      {post.User?.name}
                     </div>
-                    <div className="mx-2 flex items-center space-x-1">
+                    <div className="mx-2 flex item s-center space-x-1">
                       {formatDistanceToNow(new Date(post.createdAt), {
                         addSuffix: true,
                         locale: ko,
