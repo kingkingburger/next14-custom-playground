@@ -1,15 +1,16 @@
-// pages.tsx
-
 import Link from "next/link";
 import ApiService from "@/lib/fetch";
 import { formatDistanceToNow } from "date-fns";
 import { FaEye, FaThumbsUp, FaComment } from "react-icons/fa";
+import Image from "next/image";
+import thumnail from "/public/images/default-thumnail.png";
 
 export default async function Home() {
   const apiService = new ApiService();
   const postResultList = await apiService.fetchPosts();
 
   const typedPostList = postResultList.data;
+  const defaultThumbnail = "/images/default-thumbnail.png"; // 기본 이미지 경로 설정
 
   return (
     <div className="bg-gray-900 p-4 min-h-screen flex justify-center">
@@ -18,10 +19,12 @@ export default async function Home() {
         <main className="flex flex-col p-4 space-y-4">
           {typedPostList?.map((post) => (
             <Link key={post.id} href={`post/${post.id}`} passHref>
-              <div className="bg-gray-800 p-4 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
-                <img
-                  src={post.thumbnail}
+              <div className="bg-gray-800 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
+                <Image
+                  src={thumnail}
                   alt={post.title}
+                  width="64"
+                  height="64"
                   className="w-16 h-16 rounded object-cover"
                 />
                 <div className="flex flex-col justify-between w-full">
