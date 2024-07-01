@@ -55,7 +55,7 @@ const NewPost = () => {
     const apiService = new ApiService();
     const response = await apiService.createPost(values);
 
-    if (response.code === 200) {
+    if (response.statusCode === 200) {
       const data = await response.data;
 
       router.push(`/post/${data.id}`);

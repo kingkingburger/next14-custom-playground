@@ -1,4 +1,5 @@
 import ApiService from "@/lib/fetch";
+import dayjs from "dayjs";
 
 interface PostIdPageProps {
   params: {
@@ -17,7 +18,7 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
         <h1 className="text-4xl font-bold mb-4 text-white">{post?.title}</h1>
         <div className="flex justify-between items-center mb-4 text-gray-400">
           <span>ID: {post?.User.name}</span>
-          <span>{post?.createdAt}</span>
+          <span>{dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</span>
         </div>
         <div className="text-lg text-gray-300">{post?.content}</div>
       </main>
