@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import { FaEye, FaThumbsUp, FaComment } from "react-icons/fa";
 import Image from "next/image";
 import thumnail from "/public/images/default-thumnail.png";
+import { ko } from "date-fns/locale";
 
 export default async function Home() {
   const apiService = new ApiService();
@@ -26,15 +27,18 @@ export default async function Home() {
                   height="64"
                   className="w-16 h-16 rounded object-cover"
                 />
-                <div className="flex flex-col justify-between w-full">
-                  <div>
-                    <h2 className="text-white font-bold">{post.title} </h2>
-                    <p className="text-gray-400">
-                      {post.User.name} ·{" "}
-                      {formatDistanceToNow(new Date(post.createdAt))} 전
-                    </p>
-                  </div>
-                  <div className="flex  items-center text-gray-400">
+                <div className="flex flex-col justify-between">
+                  <h2 className="text-white font-bold">{post.title} </h2>
+                  <div className="flex items-center text-gray-400">
+                    <div className="mx-2 flex items-center space-x-1">
+                      {post.User.name}
+                    </div>
+                    <div className="mx-2 flex items-center space-x-1">
+                      {formatDistanceToNow(new Date(post.createdAt), {
+                        addSuffix: true,
+                        locale: ko,
+                      })}
+                    </div>
                     <div className="mx-2 flex items-center space-x-1">
                       <FaEye />
                       <span>{post.viewCount}</span>
