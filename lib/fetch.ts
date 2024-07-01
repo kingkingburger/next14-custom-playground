@@ -18,7 +18,19 @@ export interface PostData {
   userId: number;
   createdAt: string;
   updatedAt: string;
+  User: UserData;
 }
+
+export interface UserData {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  profilePicture: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 class ApiService {
   public readonly serverUrl: string;
 

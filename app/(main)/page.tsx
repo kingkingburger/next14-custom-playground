@@ -10,7 +10,6 @@ export default async function Home() {
   const postResultList = await apiService.fetchPosts();
 
   const typedPostList = postResultList.data;
-  const defaultThumbnail = "/images/default-thumbnail.png"; // 기본 이미지 경로 설정
 
   return (
     <div className="bg-gray-900 p-4 min-h-screen flex justify-center">
@@ -31,7 +30,7 @@ export default async function Home() {
                   <div>
                     <h2 className="text-white font-bold">{post.title} </h2>
                     <p className="text-gray-400">
-                      {post.userId} ·{" "}
+                      {post.User.name} ·{" "}
                       {formatDistanceToNow(new Date(post.createdAt))} 전
                     </p>
                   </div>
