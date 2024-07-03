@@ -37,7 +37,7 @@ const LoginPage = () => {
 
   const onSubmit = async (values: FormData) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/v1/auth/authentication`,
+      `${process.env.NEXT_PUBLIC_SERVER}/auth/token`,
       {
         method: "POST",
         headers: {
@@ -49,10 +49,9 @@ const LoginPage = () => {
 
     if (response.ok) {
       const data = await response.json();
-
       // 토큰을 localStorage에 저장
-      if (data.data) {
-        localStorage.setItem("token", data.data);
+      if (data) {
+        localStorage.setItem("access-token", data.data.accessToken);
       }
       router.push(`/`);
     } else {

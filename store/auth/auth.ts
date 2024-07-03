@@ -24,7 +24,7 @@ export const userAuthStore = create<AuthState & AuthActions>((set) => ({
   signIn: async (form) => {
     try {
       const response = await axios.post<SignInForm, AxiosResponse<UserData>>(
-        "",
+        `${process.env.NEXT_PUBLIC_SERVER}/auth/token`,
         form,
         {},
       );
