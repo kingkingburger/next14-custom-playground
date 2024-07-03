@@ -25,6 +25,12 @@ export default function MainHeader() {
           >
             글작성
           </Link>
+          <Link
+            href="/login"
+            className="bg-blue-500 text-white px-4 py-2 rounded transition transform hover:bg-blue-400 hover:scale-105 hover:shadow-lg"
+          >
+            로그인
+          </Link>
           {/*<Link*/}
           {/*  href="/"*/}
           {/*  className="bg-blue-500 text-white px-4 py-2 rounded transition transform hover:bg-blue-400 hover:scale-105 hover:shadow-lg"*/}
