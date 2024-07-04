@@ -1,5 +1,5 @@
 import { FormData } from "@/app/new-post/page";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { UserData } from "@/store/user/userType";
 
 export interface PostResult<T> {
   statusCode: number;
@@ -19,16 +19,6 @@ export interface PostData {
   createdAt: string;
   updatedAt: string;
   User: UserData;
-}
-
-export interface UserData {
-  id: number;
-  email: string;
-  password: string;
-  name: string;
-  profilePicture: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 class ApiService {

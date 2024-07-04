@@ -11,11 +11,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { userAuthStore } from "@/store/auth/auth";
 
 const formSchema = z.object({
   email: z.string().email({ message: "이메일 형식을 입력해주세요" }),
@@ -26,7 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const LoginPage = () => {
   const router = useRouter();
-
+  const { signIn, isAuthenticated } = userAuthStore();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,23 +36,8 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (values: FormData) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/auth/token`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      },
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      // 토큰을 localStorage에 저장
-      if (data) {
-        localStorage.setItem("access-token", data.data.accessToken);
-      }
+    await signIn(values);
+    if (isAuthenticated) {
       router.push(`/`);
     } else {
       toast(`로그인 실패`, {

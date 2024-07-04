@@ -1,7 +1,8 @@
 import { AuthActions, AuthState, SignInForm } from "@/store/auth/type";
 import { create } from "zustand";
 import axios, { AxiosResponse } from "axios";
-import { UserData } from "@/lib/fetch";
+import { toast } from "sonner";
+import { ApiResponseResult, tokenType } from "@/lib/response.type";
 
 const initial: AuthState = {
   isAuthenticated: false,
@@ -23,12 +24,24 @@ export const userAuthStore = create<AuthState & AuthActions>((set) => ({
   },
   signIn: async (form) => {
     try {
-      const response = await axios.post<SignInForm, AxiosResponse<UserData>>(
-        `${process.env.NEXT_PUBLIC_SERVER}/auth/token`,
-        form,
-        {},
-      );
-      set({ isAuthenticated: true, user: response.data });
+      const response = await axios.post<
+        SignInForm,
+        AxiosResponse<ApiResponseResult<tokenType>>
+      >(`${process.env.NEXT_PUBLIC_SERVER}/auth/token`, form, {});
+
+      if (response.data) {
+        const result = response.data;
+        localStorage.setItem("access-token", result.data.accessToken);
+        set({ isAuthenticated: true, user: result.data.user });
+      } else {
+        toast(`로그인 실패`, {
+          description: "로그인이 되지 않았습니다 입력정보를 다시 확인해주세요",
+          action: {
+            label: "확인",
+            onClick: () => console.log("Undo"),
+          },
+        });
+      }
     } catch (e) {
     } finally {
     }

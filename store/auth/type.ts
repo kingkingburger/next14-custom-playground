@@ -1,4 +1,4 @@
-import { UserData } from "@/lib/fetch";
+import { UserData } from "@/store/user/userType";
 
 export interface SignUpForm {
   name?: string;
