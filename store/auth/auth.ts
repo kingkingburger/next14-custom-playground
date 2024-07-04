@@ -10,7 +10,7 @@ const initial: AuthState = {
   id: null,
 };
 
-export const userAuthStore = create<AuthState & AuthActions>((set) => ({
+export const useAuthStore = create<AuthState & AuthActions>((set) => ({
   ...initial,
 
   signUp: async (form) => {

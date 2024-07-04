@@ -18,10 +18,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ApiService from "@/lib/fetch";
 import { useEffect, useState } from "react";
+import { useAuthStore } from "@/store/auth/auth";
 
 const formSchema = z.object({
   title: z.string().min(3, { message: "제목은 최소 3글자가 필요해요" }),
   content: z.string().min(10, { message: "내용은 최소 10글자가 필요해요" }),
+  userId: z.number().optional(),
 });
 
 export type FormData = z.infer<typeof formSchema>;
@@ -38,7 +40,7 @@ const NewPost = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
-
+  const { user } = useAuthStore();
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -52,12 +54,13 @@ const NewPost = () => {
   });
 
   const onSubmit = async (values: FormData) => {
+    if (user) values.userId = user.id;
+
     const apiService = new ApiService();
     const response = await apiService.createPost(values);
 
-    if (response.statusCode === 200) {
+    if (response.statusCode === 201) {
       const data = await response.data;
-
       router.push(`/post/${data.id}`);
     } else {
       errorToast;

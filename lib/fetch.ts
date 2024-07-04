@@ -1,5 +1,6 @@
 import { FormData } from "@/app/new-post/page";
 import { UserData } from "@/store/user/userType";
+import axios from "axios";
 
 export interface PostResult<T> {
   statusCode: number;
@@ -56,21 +57,12 @@ class ApiService {
 
   public async createPost(values: FormData) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/post`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(values),
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER}/post`,
+        values,
+      );
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
+      return response.data;
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
       throw error;

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { userAuthStore } from "@/store/auth/auth";
+import { useAuthStore } from "@/store/auth/auth";
 
 const formSchema = z.object({
   email: z.string().email({ message: "이메일 형식을 입력해주세요" }),
@@ -26,7 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const LoginPage = () => {
   const router = useRouter();
-  const { signIn, isAuthenticated } = userAuthStore();
+  const { signIn, isAuthenticated } = useAuthStore();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
