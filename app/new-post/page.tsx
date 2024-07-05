@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import ApiService from "@/lib/fetch";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth/auth";
+import { errorPostToast } from "@/components/errorToast/post/errorToast";
 
 const formSchema = z.object({
   title: z.string().min(3, { message: "제목은 최소 3글자가 필요해요" }),
@@ -27,14 +28,6 @@ const formSchema = z.object({
 });
 
 export type FormData = z.infer<typeof formSchema>;
-
-const errorToast = toast(`게시글이 생성되지 않았습니다.`, {
-  description: "게시글이 생성 에러",
-  action: {
-    label: "확인",
-    onClick: () => console.log("Undo"),
-  },
-});
 
 const NewPost = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -56,14 +49,18 @@ const NewPost = () => {
   const onSubmit = async (values: FormData) => {
     if (user) values.userId = user.id;
 
-    const apiService = new ApiService();
-    const response = await apiService.createPost(values);
+    try {
+      const apiService = new ApiService();
+      const response = await apiService.createPost(values);
+      console.log("response = ", response);
 
-    if (response.statusCode === 201) {
-      const data = await response.data;
-      router.push(`/post/${data.id}`);
-    } else {
-      errorToast;
+      if (response.statusCode === 201) {
+        const data = await response.data;
+        router.push(`/post/${data.id}`);
+      }
+    } catch (error) {
+      console.error("Error creating post: ", error);
+      errorPostToast();
     }
   };
 
