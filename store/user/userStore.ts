@@ -1,3 +1,6 @@
+/**
+ * auth에 있는 정보를 여기다 넣는 방법 생각해뵈기
+ */
 import { create } from "zustand";
 import { UserData } from "@/store/user/userType";
 import axios from "axios";

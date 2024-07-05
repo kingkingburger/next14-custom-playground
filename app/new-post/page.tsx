@@ -52,7 +52,6 @@ const NewPost = () => {
     try {
       const apiService = new ApiService();
       const response = await apiService.createPost(values);
-      console.log("response = ", response);
 
       if (response.statusCode === 201) {
         const data = await response.data;
