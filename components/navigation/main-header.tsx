@@ -6,6 +6,7 @@ import { useAuthStore } from "@/store/auth/auth";
 
 export default function MainHeader() {
   const { isAuthenticated, user } = useAuthStore();
+  console.log("in main: isAuthenticated, user = ", isAuthenticated, user);
   return (
     <div className="top-0 left-0 w-full z-50 bg-gray-800 p-4">
       <header className="text-white flex justify-between items-center max-w-7xl mx-auto">
@@ -30,14 +31,14 @@ export default function MainHeader() {
             글작성
           </Link>
           {isAuthenticated ? (
+            <span>{user?.email}</span>
+          ) : (
             <Link
               href="/login"
               className="bg-blue-500 text-white px-4 py-2 rounded transition transform hover:bg-blue-400 hover:scale-105 hover:shadow-lg"
             >
               로그인
             </Link>
-          ) : (
-            user?.email
           )}
 
           <ModeToggle />

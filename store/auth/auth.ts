@@ -3,6 +3,7 @@ import { create } from "zustand";
 import axios, { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { ApiResponseResult, tokenType } from "@/lib/response.type";
+import { persist } from "zustand/middleware";
 
 const initial: AuthState = {
   isAuthenticated: false,
@@ -29,8 +30,8 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
         AxiosResponse<ApiResponseResult<tokenType>>
       >(`${process.env.NEXT_PUBLIC_SERVER}/auth/token`, form, {});
 
-      if (response.data) {
-        const result = response.data;
+      const result = response.data;
+      if (result.statusCode === 200) {
         localStorage.setItem("access-token", result.data.accessToken);
         set({ isAuthenticated: true, user: result.data.user });
       } else {
