@@ -1,8 +1,13 @@
 import { jwtDecode } from "jwt-decode";
 
 export const getProfile = () => {
-  const token = localStorage.getItem("access-token");
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const token = localStorage?.getItem("access-token");
   if (token) {
     return jwtDecode(token);
   }
+  return null;
 };
