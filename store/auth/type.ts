@@ -24,3 +24,10 @@ export type AuthActions = {
   signOut: () => void;
   setId: (id: string | number) => void;
 };
+
+export interface payload {
+  userId: number;
+  username: string;
+  iat: number;
+  exp: number;
+}

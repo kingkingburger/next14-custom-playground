@@ -1,32 +1,19 @@
-"use client";
-
 import Link from "next/link";
 import ApiService, { PostData, PostResult } from "@/lib/fetch";
 import { formatDistanceToNow } from "date-fns";
-import { FaEye, FaThumbsUp, FaComment } from "react-icons/fa";
+import { FaEye, FaThumbsUp } from "react-icons/fa";
 import Image from "next/image";
 import thumnail from "/public/images/default-thumnail.png";
 import { ko } from "date-fns/locale";
-import { useEffect, useState } from "react";
-import { useAuthStore } from "@/store/auth/auth";
 
-const HomePage: React.FC = () => {
-  const [postList, setPostList] = useState<PostData[] | null>(null);
+async function getPosts() {
+  const apiService = new ApiService();
+  const postResultList: PostResult<PostData[]> = await apiService.fetchPosts();
+  return postResultList.data;
+}
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const apiService = new ApiService();
-        const postResultList: PostResult<PostData[]> =
-          await apiService.fetchPosts();
-        setPostList(postResultList.data);
-      } catch (error) {}
-    };
-
-    fetchPosts();
-  }, []);
-
-  const { user } = useAuthStore();
+export default async function HomePage() {
+  const postList = await getPosts();
 
   return (
     <div className="bg-gray-900 p-4 min-h-screen flex justify-center">
@@ -44,7 +31,7 @@ const HomePage: React.FC = () => {
                   className="w-16 h-16 rounded object-cover"
                 />
                 <div className="flex flex-col justify-between">
-                  <h2 className="text-white font-bold">{post.title} </h2>
+                  <h2 className="text-white font-bold">{post.title}</h2>
                   <div className="flex items-center text-gray-400">
                     <div className="mx-2 flex items-center space-x-1">
                       {post.User?.name}
@@ -72,6 +59,4 @@ const HomePage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default HomePage;
+}
