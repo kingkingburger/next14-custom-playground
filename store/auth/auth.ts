@@ -34,16 +34,15 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
       if (result.statusCode === 200) {
         localStorage.setItem("access-token", result.data.accessToken);
         set({ isAuthenticated: true, user: result.data.user });
-      } else {
-        toast(`로그인 실패`, {
-          description: "로그인이 되지 않았습니다 입력정보를 다시 확인해주세요",
-          action: {
-            label: "확인",
-            onClick: () => console.log("Undo"),
-          },
-        });
       }
     } catch (e) {
+      toast(`로그인 실패`, {
+        description: "로그인이 되지 않았습니다 입력정보를 다시 확인해주세요",
+        action: {
+          label: "확인",
+          onClick: () => console.log("Undo"),
+        },
+      });
     } finally {
     }
   },
