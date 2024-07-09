@@ -12,6 +12,7 @@ export default function MainHeader() {
   const [userInfo, setUserInfo] = useState<payload | null>(null);
   const { signOut, isAuthenticated } = useAuthStore();
   const router = useRouter();
+  const [showLoginMessage, setShowLoginMessage] = useState(false);
 
   useEffect(() => {
     const checkUserInfo = () => {
@@ -52,12 +53,33 @@ export default function MainHeader() {
             placeholder="검색어를 입력하세요"
             className="p-2 rounded bg-gray-700 text-white"
           />
-          <Link
-            href="/new-post"
-            className="bg-teal-500 text-white px-4 py-2 rounded transition transform hover:bg-teal-400 hover:scale-105 hover:shadow-lg"
-          >
-            글작성
-          </Link>
+
+          {userInfo ? (
+            <Link
+              href="/new-post"
+              className="bg-teal-500 text-white px-4 py-2 rounded transition transform hover:bg-teal-400 hover:scale-105 hover:shadow-lg"
+            >
+              글작성
+            </Link>
+          ) : (
+            <div
+              className="relative"
+              onMouseEnter={() => setShowLoginMessage(true)}
+              onMouseLeave={() => setShowLoginMessage(false)}
+            >
+              <button
+                disabled
+                className="bg-teal-500 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed"
+              >
+                글작성
+              </button>
+              {showLoginMessage && (
+                <div className="absolute top-full mt-2 w-40 bg-red-500 text-white text-center p-2 rounded shadow-lg text-sm">
+                  로그인이 필요합니다
+                </div>
+              )}
+            </div>
+          )}
           {userInfo ? (
             <button
               onClick={handleLogout}
