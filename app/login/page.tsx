@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth/auth";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "이메일 형식을 입력해주세요" }),
@@ -27,6 +28,7 @@ type FormData = z.infer<typeof formSchema>;
 const LoginPage = () => {
   const router = useRouter();
   const { signIn, isAuthenticated } = useAuthStore();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,19 +37,14 @@ const LoginPage = () => {
     },
   });
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated]);
+
   const onSubmit = async (values: FormData) => {
     await signIn(values);
-    if (isAuthenticated) {
-      router.push(`/`);
-    } else {
-      toast(`로그인 실패`, {
-        description: "로그인이 되지 않았습니다 입력정보를 다시 확인해주세요",
-        action: {
-          label: "확인",
-          onClick: () => console.log("Undo"),
-        },
-      });
-    }
   };
 
   return (
