@@ -19,7 +19,10 @@ import { toast } from "sonner";
 import ApiService from "@/lib/fetch";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth/auth";
-import { errorPostToast } from "@/components/errorToast/post/errorToast";
+import {
+  errorPostToast,
+  errorToast,
+} from "@/components/errorToast/post/errorToast";
 
 const formSchema = z.object({
   title: z.string().min(3, { message: "제목은 최소 3글자가 필요해요" }),
@@ -48,10 +51,11 @@ const NewPost = () => {
 
   const onSubmit = async (values: FormData) => {
     if (user) values.userId = user.id;
-
+    const token = localStorage.getItem("access-token");
+    if (!token) errorToast("로그인이 필요합니다.");
     try {
       const apiService = new ApiService();
-      const response = await apiService.createPost(values);
+      const response = await apiService.createPost(values, token);
 
       if (response.statusCode === 201) {
         const data = await response.data;

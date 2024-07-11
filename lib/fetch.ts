@@ -55,11 +55,14 @@ class ApiService {
     }
   }
 
-  public async createPost(values: FormData) {
+  public async createPost(values: FormData, token: string | null) {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER}/post`,
         values,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        },
       );
 
       return response.data;

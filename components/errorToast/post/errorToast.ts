@@ -9,3 +9,13 @@ export const errorPostToast = () => {
     },
   });
 };
+
+export const errorToast = (message: string) => {
+  toast(`${message}`, {
+    description: "게시글이 생성 에러",
+    action: {
+      label: "확인",
+      onClick: () => console.log("확인 버튼 클릭됨"),
+    },
+  });
+};
