@@ -7,6 +7,17 @@ import { useEffect, useState } from "react";
 import { payload } from "@/store/auth/type";
 import { useAuthStore } from "@/store/auth/auth";
 import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function MainHeader() {
   const [userInfo, setUserInfo] = useState<payload | null>(null);
@@ -62,23 +73,21 @@ export default function MainHeader() {
               글작성
             </Link>
           ) : (
-            <div
-              className="relative"
-              onMouseEnter={() => setShowLoginMessage(true)}
-              onMouseLeave={() => setShowLoginMessage(false)}
-            >
-              <button
-                disabled
-                className="bg-teal-500 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed"
-              >
-                글작성
-              </button>
-              {showLoginMessage && (
-                <div className="absolute top-full mt-2 w-40 bg-red-500 text-white text-center p-2 rounded shadow-lg text-sm">
-                  로그인이 필요합니다
-                </div>
-              )}
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    disabled
+                    className="bg-teal-500 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed"
+                  >
+                    글작성
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>로그인이 필요합니다</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
           {userInfo ? (
             <button
