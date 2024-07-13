@@ -23,6 +23,7 @@ import {
   errorPostToast,
   errorToast,
 } from "@/components/errorToast/post/errorToast";
+import TiptapComponent from "@/components/tiptaps/TiptapComponent";
 
 const formSchema = z.object({
   title: z.string().min(3, { message: "제목은 최소 3글자가 필요해요" }),
@@ -74,6 +75,7 @@ const NewPost = () => {
   return (
     <div className="max-w-2xl mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">새로운 글</h1>
+      <TiptapComponent />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
