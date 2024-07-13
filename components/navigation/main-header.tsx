@@ -8,11 +8,6 @@ import { payload } from "@/store/auth/type";
 import { useAuthStore } from "@/store/auth/auth";
 import { useRouter } from "next/navigation";
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -23,7 +18,6 @@ export default function MainHeader() {
   const [userInfo, setUserInfo] = useState<payload | null>(null);
   const { signOut, isAuthenticated } = useAuthStore();
   const router = useRouter();
-  const [showLoginMessage, setShowLoginMessage] = useState(false);
 
   useEffect(() => {
     const checkUserInfo = () => {
