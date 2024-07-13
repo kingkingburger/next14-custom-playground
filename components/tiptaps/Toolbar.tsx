@@ -181,7 +181,7 @@ const Toolbar = ({ editor, content }: Props) => {
           type="submit"
           className="px-4 bg-sky-700 text-white py-2 rounded-md"
         >
-          Add
+          생성
         </button>
       )}
     </div>
