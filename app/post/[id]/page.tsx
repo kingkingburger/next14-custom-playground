@@ -1,5 +1,7 @@
 import ApiService from "@/lib/fetch";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify";
+import { JSDOM } from "jsdom";
 
 interface PostIdPageProps {
   params: {
@@ -7,10 +9,15 @@ interface PostIdPageProps {
   };
 }
 
+const window = new JSDOM("").window;
+const DOMPurifyInstance = DOMPurify(window);
+
 export default async function PostIdPageClient({ params }: PostIdPageProps) {
   const apiService = new ApiService();
   const postResult = await apiService.getPostById(params.id);
   const post = postResult.data;
+
+  const sanitizedContent = DOMPurifyInstance.sanitize(post?.content);
 
   return (
     <div className="bg-gray-900 min-h-screen p-4">
@@ -23,7 +30,7 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
 
         <div
           className="text-lg text-gray-300"
-          dangerouslySetInnerHTML={{ __html: post?.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </main>
       {/*<CommentPage />*/}
