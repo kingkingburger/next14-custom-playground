@@ -123,7 +123,7 @@ const NewPost = () => {
           <FormItem>
             <FormLabel>내용</FormLabel>
             <TiptapComponent content={content} onChange={handleContentChange} />
-            <FormMessage name="content" />
+            {/*<FormMessage name="content" />*/}
           </FormItem>
           <Button type="submit">Submit</Button>
         </form>

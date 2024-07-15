@@ -11,6 +11,7 @@ const TiptapComponent = ({ onChange, content }: any) => {
   };
   const editor = useEditor({
     extensions: [StarterKit, Underline],
+    content: content, // 초기 콘텐츠 설정
     editorProps: {
       attributes: {
         class:
@@ -18,13 +19,14 @@ const TiptapComponent = ({ onChange, content }: any) => {
       },
     },
     onUpdate: ({ editor }) => {
-      handleChange(editor.getHTML());
+      handleChange(editor.getHTML()); // HTML 형태로 저장
     },
   });
 
   return (
     <div className="w-full px-4">
       <Toolbar editor={editor} content={content} />
+
       <EditorContent style={{ whiteSpace: "pre-line" }} editor={editor} />
     </div>
   );

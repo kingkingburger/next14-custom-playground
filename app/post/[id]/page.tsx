@@ -20,7 +20,11 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
           <span>ID: {post?.User.name}</span>
           <span>{dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</span>
         </div>
-        <div className="text-lg text-gray-300">{post?.content}</div>
+
+        <div
+          className="text-lg text-gray-300"
+          dangerouslySetInnerHTML={{ __html: post?.content }}
+        />
       </main>
       {/*<CommentPage />*/}
     </div>
