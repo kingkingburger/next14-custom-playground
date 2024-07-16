@@ -22,7 +22,7 @@ import {
   errorToast,
 } from "@/components/errorToast/post/errorToast";
 import TiptapComponent from "@/components/tiptaps/TiptapComponent";
-import { getProfile } from "@/lib/current-profile";
+import { getCurrentUserInfo } from "@/lib/current-profile";
 import { payload } from "@/store/auth/type";
 
 const formSchema = z.object({
@@ -45,21 +45,7 @@ const NewPost = () => {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    const checkUserInfo = () => {
-      try {
-        const profile = getProfile() as payload;
-        setUserInfo((prevState) =>
-          prevState?.userId === profile?.userId ? prevState : profile,
-        );
-      } catch (error) {
-        console.error("Failed to get user profile:", error);
-        setUserInfo(null);
-      }
-    };
-
-    checkUserInfo();
-  }, [isAuthenticated]);
+  getCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
