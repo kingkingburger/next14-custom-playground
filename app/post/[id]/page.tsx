@@ -2,6 +2,8 @@ import ApiService from "@/lib/fetch";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
+import { formatDistanceToNow } from "date-fns";
+import { ko } from "date-fns/locale";
 
 interface PostIdPageProps {
   params: {
@@ -26,6 +28,12 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
         <div className="flex justify-between items-center mb-4 text-gray-400">
           <span>ID: {post?.User.name}</span>
           <span>{dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</span>
+          <span>
+            {formatDistanceToNow(new Date(post?.createdAt), {
+              addSuffix: true,
+              locale: ko,
+            })}
+          </span>
         </div>
 
         <div

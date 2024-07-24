@@ -58,24 +58,8 @@ class ApiService {
 
   public async getPostById(id: string): Promise<PostResult<PostData>> {
     try {
-      const response = await fetch(`${this.serverUrl}/post/id/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-        cache: "no-cache",
-        next: {
-          // revalidate: 2,
-          // tags: ["main"],
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      return await response.json();
+      const response = await axios.get(`${this.serverUrl}/post/id/${id}`);
+      return response.data;
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
       throw error;
