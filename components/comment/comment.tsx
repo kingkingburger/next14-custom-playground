@@ -10,7 +10,7 @@ interface CommentIdPage {
   };
 }
 
-export default function CommentPage() {
+export const CommentComponent = () => {
   const [isClient, setIsClient] = useState(false);
   const params = useParams();
   const { getPost, selectPost } = usePostStore();
@@ -59,4 +59,4 @@ export default function CommentPage() {
       </main>
     </div>
   );
-}
+};
