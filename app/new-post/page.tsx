@@ -106,11 +106,23 @@ const NewPost = () => {
               </FormItem>
             )}
           />
-          <FormItem>
-            <FormLabel>내용</FormLabel>
-            <TiptapComponent content={content} onChange={handleContentChange} />
-            {/*<FormMessage name="content" />*/}
-          </FormItem>
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>내용</FormLabel>
+                <FormControl>
+                  <TiptapComponent
+                    content={content}
+                    onChange={handleContentChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button type="submit">Submit</Button>
         </form>
       </Form>
