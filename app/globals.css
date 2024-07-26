@@ -1,76 +1,133 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 224 71.4% 4.1%;
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
 
-      --card: 0 0% 100%;
-      --card-foreground: 224 71.4% 4.1%;
+input {
+  outline: none;
+}
 
-      --popover: 0 0% 100%;
-      --popover-foreground: 224 71.4% 4.1%;
+textarea {
+  outline: none;
+}
 
-      --primary: 220.9 39.3% 11%;
-      --primary-foreground: 210 20% 98%;
+.ptr-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #aaa;
+  z-index: 10;
+  text-align: center;
+  height: 50px;
+  transition: all;
+}
 
-      --secondary: 220 14.3% 95.9%;
-      --secondary-foreground: 220.9 39.3% 11%;
+.ptr-element .genericon {
+  opacity: 0.6;
+  font-size: 34px;
+  width: auto;
+  height: auto;
+  transition: all 0.25s ease;
+  transform: rotate(90deg);
+  margin-top: 5px;
+}
+.ptr-refresh .ptr-element .genericon {
+  transform: rotate(270deg);
+}
+.ptr-loading .ptr-element .genericon,
+.ptr-reset .ptr-element .genericon {
+  display: none;
+}
 
-      --muted: 220 14.3% 95.9%;
-      --muted-foreground: 220 8.9% 46.1%;
+.loading {
+  display: inline-block;
+  text-align: center;
+  opacity: 0.4;
+  display: none;
+}
+.ptr-loading .loading {
+  display: block;
+}
 
-      --accent: 220 14.3% 95.9%;
-      --accent-foreground: 220.9 39.3% 11%;
+.loading span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 10px;
+  height: 10px;
+  margin-right: 3px;
+  transform: scale(0.3);
+  border-radius: 50%;
+  animation: ptr-loading 0.4s infinite alternate;
+}
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 20% 98%;
+.loading-ptr-1 {
+  animation-delay: 0 !important;
+}
 
-      --border: 220 13% 91%;
-      --input: 220 13% 91%;
-      --ring: 224 71.4% 4.1%;
+.loading-ptr-2 {
+  animation-delay: 0.2s !important;
+}
 
-      --radius: 0.5rem;
-    }
+.loading-ptr-3 {
+  animation-delay: 0.4s !important;
+}
 
-    .dark {
-      --background: 224 71.4% 4.1%;
-      --foreground: 210 20% 98%;
-
-      --card: 224 71.4% 4.1%;
-      --card-foreground: 210 20% 98%;
-
-      --popover: 224 71.4% 4.1%;
-      --popover-foreground: 210 20% 98%;
-
-      --primary: 210 20% 98%;
-      --primary-foreground: 220.9 39.3% 11%;
-
-      --secondary: 215 27.9% 16.9%;
-      --secondary-foreground: 210 20% 98%;
-
-      --muted: 215 27.9% 16.9%;
-      --muted-foreground: 217.9 10.6% 64.9%;
-
-      --accent: 215 27.9% 16.9%;
-      --accent-foreground: 210 20% 98%;
-
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 20% 98%;
-
-      --border: 215 27.9% 16.9%;
-      --input: 215 27.9% 16.9%;
-      --ring: 216 12.2% 83.9%;
-    }
+@keyframes ptr-loading {
+  0% {
+    transform: translateY(0) scale(0.3);
+    opacity: 0;
   }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+  100% {
+    transform: scale(1);
+    background-color: #333;
+    opacity: 1;
   }
+}
+
+.ptr-loading .refresh-view,
+.ptr-reset .refresh-view,
+.ptr-loading .ptr-element,
+.ptr-reset .ptr-element {
+  transition: all 0.25s ease;
+}
+
+.ptr-reset .refresh-view {
+  transform: translate3d(0, 0, 0);
+}
+
+.ptr-loading .refresh-view {
+  transform: translate3d(0, 30px, 0);
+}
+
+/* react-pull-to-refresh CSS */
+
+body:not(.ptr-loading) .ptr-element {
+  transform: translate3d(0, -50px, 0);
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
