@@ -16,7 +16,7 @@ export default async function HomePage() {
   const postList = await getPosts();
 
   return (
-    <div className="bg-gray-900 p-4 min-h-screen flex justify-center">
+    <div className="p-4 min-h-screen flex justify-center">
       <div className="w-full max-w-3xl">
         <h1 className="text-white p-4">전체 인기글</h1>
         <main className="flex flex-col p-4 space-y-4">
