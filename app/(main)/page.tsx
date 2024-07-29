@@ -22,7 +22,7 @@ export default async function HomePage() {
         <main className="flex flex-col p-4 space-y-4">
           {postList?.map((post) => (
             <Link key={post.id} href={`post/${post.id}`} passHref>
-              <div className="bg-gray-800 p-2 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
+              <div className="bg-blue-100 p-2 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
                 <Image
                   src={thumnail}
                   alt={post.title}
