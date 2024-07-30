@@ -28,7 +28,7 @@ export default function MainHeader() {
   };
 
   return (
-    <div className="top-0 left-0 w-full z-50 bg-gray-800 p-4">
+    <div className="top-0 left-0 w-full z-50 bg-gray-100 p-4">
       <header className="text-white flex justify-between items-center max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold">
           <a
