@@ -59,7 +59,17 @@ class ApiService {
   public async getPostById(id: string): Promise<PostResult<PostData>> {
     try {
       const response = await axios.get(`${this.serverUrl}/post/id/${id}`);
+      await this.viewCountUp(id);
       return response.data;
+    } catch (error: any) {
+      console.error("Failed to fetch posts:", error.message);
+      throw error;
+    }
+  }
+
+  public async viewCountUp(id: string) {
+    try {
+      await axios.put(`${this.serverUrl}/post/count/up/id/${id}`);
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
       throw error;
