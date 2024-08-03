@@ -1,33 +1,63 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import ApiService, { PostData, PostResult } from "@/lib/fetch";
 import { formatDistanceToNow } from "date-fns";
 import { FaEye, FaThumbsUp } from "react-icons/fa";
 import Image from "next/image";
 import thumnail from "/public/images/default-thumnail.png";
 import { ko } from "date-fns/locale";
+import ApiService, { PostData } from "@/lib/fetch";
 
-async function getPosts() {
-  const apiService = new ApiService();
-  const postResultList: PostResult<PostData[]> = await apiService.fetchPosts();
-  return postResultList.data;
-}
+const apiService = new ApiService();
 
-export default async function HomePage() {
-  const postList = await getPosts();
+export default function HomePage() {
+  const [postList, setPostList] = useState<PostData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const result = await apiService.fetchPosts();
+      setPostList(result.data);
+    } catch (error) {
+      console.error("Failed to fetch posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  // 페이지가 포커스를 받을 때마다 데이터를 새로 가져옵니다.
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchPosts();
+    };
+
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, []);
+
+  if (loading) {
+    return <div className="text-white">Loading...</div>;
+  }
 
   return (
     <div className="p-4 min-h-screen flex justify-center">
       <div className="w-full max-w-3xl">
         <h1 className="text-white p-4">전체 인기글</h1>
         <main className="flex flex-col p-4 space-y-4">
-          {postList?.map((post) => (
+          {postList.map((post: PostData) => (
             <Link key={post.id} href={`post/${post.id}`} passHref>
               <div className="bg-blue-100 p-2 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
                 <Image
                   src={thumnail}
                   alt={post.title}
-                  width="64"
-                  height="64"
+                  width={64}
+                  height={64}
                   className="w-16 h-16 rounded object-cover"
                 />
                 <div className="flex flex-col justify-between">
