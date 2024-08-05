@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
+import { FaEye } from "react-icons/fa";
 
 interface PostIdPageProps {
   params: {
@@ -27,6 +28,10 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
         <h1 className="text-4xl font-bold mb-4 text-white">{post?.title}</h1>
         <div className="flex justify-between items-center mb-4 text-gray-400">
           <span>ID: {post?.User.name}</span>
+          <div className="mx-2 flex items-center space-x-1">
+            <FaEye />
+            <span>{post.viewCount}</span>
+          </div>
           <span>{dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</span>
           <span>
             {formatDistanceToNow(new Date(post?.createdAt), {
