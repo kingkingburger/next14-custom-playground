@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import usePostStore from "@/store/postStore";
 
-interface CommentIdPage {
+interface CommentComponentProps {
   params: {
     id: string;
   };
 }
 
-export const CommentComponent = () => {
+export const CommentComponent = ({ params }: CommentComponentProps) => {
   const [isClient, setIsClient] = useState(false);
-  const params = useParams();
+  // const params = useParams();
   const { getPost, selectPost } = usePostStore();
 
   useEffect(() => {
