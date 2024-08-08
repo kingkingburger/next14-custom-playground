@@ -28,6 +28,19 @@ const useCommentStore = create<CommentState>((set, get) => ({
   selectComment: null,
   CommentList: null,
 
+  createComments: async (params: any) => {
+    try {
+      const response = await ky.post(
+        `${process.env.NEXT_PUBLIC_SERVER}/comment`,
+        params,
+      );
+
+      set({ CommentList: response.data });
+    } catch (error) {
+      console.error("Failed to fetch comments", error);
+    }
+  },
+
   fetchComments: async () => {
     try {
       const response = await ky
