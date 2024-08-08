@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import ky from "@toss/ky";
 
 interface CommentType {
   message: string;
@@ -28,33 +29,25 @@ const useCommentStore = create<CommentState>((set, get) => ({
   CommentList: null,
 
   fetchComments: async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/Comment`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    const CommentResultList = await response.json();
-    set({ CommentList: CommentResultList.data });
+    try {
+      const response = await ky
+        .get(`${process.env.NEXT_PUBLIC_SERVER}/api/comment`)
+        .json<CommentType>();
+      set({ CommentList: response.data });
+    } catch (error) {
+      console.error("Failed to fetch comments", error);
+    }
   },
 
   getComment: async (id: string) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/Comment/id/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    const CommentResult = (await response.json()) as CommentType;
-    set({ selectComment: CommentResult.data });
+    try {
+      const response = await ky
+        .get(`${process.env.NEXT_PUBLIC_SERVER}/api/comment/id/${id}`)
+        .json<CommentType>();
+      set({ selectComment: response.data });
+    } catch (error) {
+      console.error(`Failed to fetch comment with id ${id}`, error);
+    }
   },
 
   setList: (list: CommentData[]) => set({ CommentList: list }),
