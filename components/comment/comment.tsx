@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import usePostStore from "@/store/postStore";
+import useCommentStore from "@/store/commentStore";
 
 interface CommentComponentProps {
   params: {
@@ -13,11 +12,10 @@ interface CommentComponentProps {
 export const CommentComponent = ({ params }: CommentComponentProps) => {
   const [isClient, setIsClient] = useState(false);
   // const params = useParams();
-  const { getPost, selectPost } = usePostStore();
+  const { createComments } = useCommentStore();
 
   useEffect(() => {
     setIsClient(true);
-    getPost(params?.id as string);
   }, []);
 
   if (!isClient) {
