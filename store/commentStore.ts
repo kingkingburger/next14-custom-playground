@@ -17,6 +17,10 @@ interface CommentData {
 
 interface CommentState {
   selectComment?: CommentData | null;
+  createComments: (
+    formData: CommentData,
+    token: string | null,
+  ) => Promise<void>;
   CommentList: CommentData | CommentData[] | null;
   fetchComments: () => Promise<void>;
   getComment: (id: string) => Promise<void>;
@@ -28,11 +32,11 @@ const useCommentStore = create<CommentState>((set, get) => ({
   selectComment: null,
   CommentList: null,
 
-  createComments: async (params: any) => {
+  createComments: async (form: any, token: string | null) => {
     try {
       const response = await ky.post(
         `${process.env.NEXT_PUBLIC_SERVER}/comment`,
-        params,
+        form,
       );
 
       set({ CommentList: response.data });

@@ -2,6 +2,17 @@
 
 import { useEffect, useState } from "react";
 import useCommentStore from "@/store/commentStore";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  errorPostToast,
+  errorToast,
+} from "@/components/errorToast/post/errorToast";
+import ApiService from "@/lib/fetch";
+import { payload } from "@/store/auth/type";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth/auth";
 
 interface CommentComponentProps {
   params: {
@@ -9,17 +20,53 @@ interface CommentComponentProps {
   };
 }
 
+const formSchema = z.object({
+  content: z.string(),
+  userId: z.number().optional(),
+  postId: z.number().optional(),
+});
+
+export type FormData = z.infer<typeof formSchema>;
+
 export const CommentComponent = ({ params }: CommentComponentProps) => {
-  const [isClient, setIsClient] = useState(false);
-  // const params = useParams();
+  const [isMounted, setIsMounted] = useState(false);
+  const [content, setContent] = useState<string>("");
+  const [userInfo, setUserInfo] = useState<payload | null>(null);
+
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
   const { createComments } = useCommentStore();
 
   useEffect(() => {
-    setIsClient(true);
+    setIsMounted(true);
   }, []);
 
-  if (!isClient) {
-    return null; // 클라이언트에서만 랜더링할 내용이 있다면 여기를 사용
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content: "",
+    },
+  });
+
+  const onSubmit = async (values: FormData) => {
+    if (userInfo) values.userId = userInfo?.userId;
+    const token = localStorage.getItem("access-token");
+    if (!token) errorToast("로그인이 필요합니다.");
+
+    try {
+      await createComments(values, token);
+
+      // if (response.statusCode === 201) {
+      //
+      // }
+    } catch (error) {
+      console.error("Error creating post: ", error);
+      errorPostToast();
+    }
+  };
+
+  if (!isMounted) {
+    return null;
   }
 
   return (
