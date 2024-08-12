@@ -46,13 +46,13 @@ export default function HomePage() {
   }
 
   return (
-    <div className="p-4 min-h-screen flex justify-center">
+    <div className="p-4 min-h-screen flex justify-center bg-gray-900">
       <div className="w-full max-w-3xl">
         <h1 className="text-white p-4">전체 인기글</h1>
         <main className="flex flex-col p-4 space-y-4">
           {postList.map((post: PostData) => (
             <Link key={post.id} href={`post/${post.id}`} passHref>
-              <div className="bg-blue-100 p-2 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
+              <div className="bg-gray-800 p-2 rounded shadow transition transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
                 <Image
                   src={thumnail}
                   alt={post.title}
