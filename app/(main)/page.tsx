@@ -8,6 +8,7 @@ import Image from "next/image";
 import thumnail from "/public/images/default-thumnail.png";
 import { ko } from "date-fns/locale";
 import ApiService, { PostData } from "@/lib/fetch";
+import HomeLoading from "@/app/(main)/loading";
 
 const apiService = new ApiService();
 
@@ -42,7 +43,7 @@ export default function HomePage() {
   }, []);
 
   if (loading) {
-    return <div className="text-white">Loading...</div>;
+    return <HomeLoading />;
   }
 
   return (

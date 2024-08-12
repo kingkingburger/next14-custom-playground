@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { ModeToggle } from "@/components/dark-mode-toggle";
-import { getCurrentUserInfo, getProfile } from "@/lib/current-profile";
-import { useEffect, useState } from "react";
+import { getCurrentUserInfo } from "@/lib/current-profile";
+import { useState } from "react";
 import { payload } from "@/store/auth/type";
 import { useAuthStore } from "@/store/auth/auth";
 import { useRouter } from "next/navigation";
