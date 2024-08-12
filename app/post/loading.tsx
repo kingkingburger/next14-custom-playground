@@ -1,5 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
 const PostLoading = () => {
   return (
     <div className="bg-gray-900 min-h-screen p-4">
