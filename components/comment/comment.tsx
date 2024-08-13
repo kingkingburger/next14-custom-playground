@@ -22,6 +22,7 @@ import {
   errorToast,
 } from "@/components/errorToast/post/errorToast";
 import { payload } from "@/store/auth/type";
+import { getCurrentUserInfo } from "@/lib/current-profile";
 
 const formSchema = z.object({
   content: z.string().min(3, { message: "댓글은 최소 3글자가 필요해요" }),
@@ -49,13 +50,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
     setIsMounted(true);
   }, []);
 
-  // 현재 로그인된 사용자 정보를 가져와 설정하는 함수
-  useEffect(() => {
-    if (isAuthenticated) {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
-      setUserInfo(userInfo);
-    }
-  }, [isAuthenticated]);
+  getCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -72,8 +67,10 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
       errorToast("로그인이 필요합니다.");
       return;
     }
+    values.userId = userInfo?.userId;
 
     try {
+      console.log("values = ", values);
       await createComments(values, token);
       router.refresh(); // 댓글 작성 후 페이지를 새로고침하여 변경사항 반영
     } catch (error) {
