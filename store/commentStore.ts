@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import ky from "@toss/ky";
+import { CommentFormData } from "@/components/comment/comment";
 
 interface CommentType {
   message: string;
@@ -9,16 +10,21 @@ interface CommentType {
 
 interface CommentData {
   id: string;
-  title: string;
+  postId: number;
+  userId: number;
+  parentId: number;
   content: string;
   createdAt: string;
   updatedAt: string;
+  User: {
+    name: string;
+  };
 }
 
 interface CommentState {
   selectComment?: CommentData | null;
   createComments: (
-    formData: CommentData,
+    formData: CommentFormData,
     token: string | null,
   ) => Promise<void>;
   CommentList: CommentData | CommentData[] | null;
@@ -32,7 +38,7 @@ const useCommentStore = create<CommentState>((set, get) => ({
   selectComment: null,
   CommentList: null,
 
-  createComments: async (form: any, token: string | null) => {
+  createComments: async (form: CommentFormData, token: string | null) => {
     try {
       const response = await ky.post(
         `${process.env.NEXT_PUBLIC_SERVER}/comment`,

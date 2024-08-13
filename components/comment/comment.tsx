@@ -1,18 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import useCommentStore from "@/store/commentStore";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useAuthStore } from "@/store/auth/auth";
+import useCommentStore from "@/store/commentStore";
+import {
   errorPostToast,
   errorToast,
 } from "@/components/errorToast/post/errorToast";
-import ApiService from "@/lib/fetch";
 import { payload } from "@/store/auth/type";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/auth/auth";
+
+const formSchema = z.object({
+  content: z.string().min(3, { message: "댓글은 최소 3글자가 필요해요" }),
+  userId: z.number().optional(),
+  postId: z.number().optional(),
+});
+
+export type CommentFormData = z.infer<typeof formSchema>;
 
 interface CommentComponentProps {
   params: {
@@ -20,17 +37,8 @@ interface CommentComponentProps {
   };
 }
 
-const formSchema = z.object({
-  content: z.string(),
-  userId: z.number().optional(),
-  postId: z.number().optional(),
-});
-
-export type FormData = z.infer<typeof formSchema>;
-
-export const CommentComponent = ({ params }: CommentComponentProps) => {
+export const CommentInputComponent = ({ params }: CommentComponentProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [content, setContent] = useState<string>("");
   const [userInfo, setUserInfo] = useState<payload | null>(null);
 
   const router = useRouter();
@@ -41,6 +49,14 @@ export const CommentComponent = ({ params }: CommentComponentProps) => {
     setIsMounted(true);
   }, []);
 
+  // 현재 로그인된 사용자 정보를 가져와 설정하는 함수
+  useEffect(() => {
+    if (isAuthenticated) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
+      setUserInfo(userInfo);
+    }
+  }, [isAuthenticated]);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,19 +64,20 @@ export const CommentComponent = ({ params }: CommentComponentProps) => {
     },
   });
 
-  const onSubmit = async (values: FormData) => {
-    if (userInfo) values.userId = userInfo?.userId;
+  const onSubmit = async (values: CommentFormData) => {
+    if (userInfo) values.userId = userInfo.userId;
+    values.postId = parseInt(params.id, 10);
     const token = localStorage.getItem("access-token");
-    if (!token) errorToast("로그인이 필요합니다.");
+    if (!token) {
+      errorToast("로그인이 필요합니다.");
+      return;
+    }
 
     try {
       await createComments(values, token);
-
-      // if (response.statusCode === 201) {
-      //
-      // }
+      router.refresh(); // 댓글 작성 후 페이지를 새로고침하여 변경사항 반영
     } catch (error) {
-      console.error("Error creating post: ", error);
+      console.error("Error creating comment: ", error);
       errorPostToast();
     }
   };
@@ -70,38 +87,32 @@ export const CommentComponent = ({ params }: CommentComponentProps) => {
   }
 
   return (
-    <div className="bg-gray-900 min-h-screen p-4">
-      <main className="max-w-3xl mx-auto p-6 bg-gray-800 rounded-lg shadow-lg mt-10 border border-gray-700">
-        <h1 className="text-4xl font-bold mb-4 text-white">
-          {/*{postContent.title}*/}
-        </h1>
-        <div className="flex justify-between items-center mb-4 text-gray-400">
-          {/*<span>ID: {postContent.id}</span>*/}
-          {/*<span>{new Date(postContent.createdDate).toLocaleDateString()}</span>*/}
-        </div>
-        <div className="text-lg text-gray-300 mb-6">
-          {/*{postContent.content}*/}
-        </div>
-        <div className="bg-gray-800 p-4 rounded-lg shadow-lg mt-6 border border-gray-700">
-          <h2 className="text-2xl font-bold mb-4 text-white">Comments</h2>
-
-          <div className="flex items-center mb-4">
-            <input
-              type="text"
-              className="flex-grow p-2 mr-2 rounded bg-gray-700 text-white"
-              placeholder="Add a comment..."
-              // value={newComment}
-              // onChange={(e) => setNewComment(e.target.value)}
-            />
-            <button
-              // onClick={handleAddComment}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </main>
+    <div className="max-w-2xl mx-auto p-8">
+      <h2 className="text-2xl font-bold mb-6">댓글 작성</h2>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>댓글 내용</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="댓글을 입력해주세요"
+                    className="border-4"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
     </div>
   );
 };
+
+export default CommentInputComponent;

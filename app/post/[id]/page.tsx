@@ -5,7 +5,7 @@ import { JSDOM } from "jsdom";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FaEye } from "react-icons/fa";
-import { CommentComponent } from "@/components/comment/comment";
+import { CommentInputComponent } from "@/components/comment/comment";
 
 interface PostIdPageProps {
   params: {
@@ -47,7 +47,7 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </main>
-      <CommentComponent />
+      <CommentInputComponent params={{ id: post.id }} />
     </div>
   );
 }
