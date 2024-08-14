@@ -5,7 +5,7 @@ import { JSDOM } from "jsdom";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FaEye } from "react-icons/fa";
-import { CommentInputComponent } from "@/components/comment/comment";
+import CommentInputComponent from "@/components/comment/commentInput";
 
 interface PostIdPageProps {
   params: {
