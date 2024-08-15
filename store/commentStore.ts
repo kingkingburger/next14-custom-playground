@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import ky from "@toss/ky";
-import { CommentFormData } from "@/components/comment/comment";
+import { CommentFormData } from "@/components/comment/commentInput";
 
 interface CommentType {
   message: string;
@@ -40,11 +40,10 @@ const useCommentStore = create<CommentState>((set, get) => ({
 
   createComments: async (form: CommentFormData, token: string | null) => {
     try {
-      const response = await ky.post(
-        `${process.env.NEXT_PUBLIC_SERVER}/comment`,
-        form,
-      );
-
+      const response = await ky
+        .post(`${process.env.NEXT_PUBLIC_SERVER}/comment`, { json: form })
+        .json();
+      console.log("response = ", response);
       set({ CommentList: response.data });
     } catch (error) {
       console.error("Failed to fetch comments", error);

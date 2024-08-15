@@ -70,7 +70,6 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
     values.userId = userInfo?.userId;
 
     try {
-      console.log("values = ", values);
       await createComments(values, token);
       router.refresh(); // 댓글 작성 후 페이지를 새로고침하여 변경사항 반영
     } catch (error) {
