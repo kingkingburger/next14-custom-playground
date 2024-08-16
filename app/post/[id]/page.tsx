@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { FaEye } from "react-icons/fa";
 import CommentInputComponent from "@/components/comment/commentInput";
+import CommentListComponent from "@/components/comment/commentLIst";
 
 interface PostIdPageProps {
   params: {
@@ -47,6 +48,7 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </main>
+      <CommentListComponent postId={+post.id} />
       <CommentInputComponent params={{ id: post.id }} />
     </div>
   );

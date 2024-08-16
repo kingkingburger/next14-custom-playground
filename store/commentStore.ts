@@ -28,7 +28,7 @@ interface CommentState {
     token: string | null,
   ) => Promise<void>;
   CommentList: CommentData | CommentData[] | null;
-  getComment: (id: string) => Promise<void>;
+  getComment: (id: number) => Promise<void>;
   setList: (list: CommentData[]) => void;
   setSelectComment: (Comment: CommentData) => void;
 }
@@ -49,7 +49,7 @@ const useCommentStore = create<CommentState>((set, get) => ({
     }
   },
 
-  getComment: async (id: string) => {
+  getComment: async (id: number) => {
     try {
       const response = await ky
         .get(`${process.env.NEXT_PUBLIC_SERVER}/api/comment/id/${id}`)

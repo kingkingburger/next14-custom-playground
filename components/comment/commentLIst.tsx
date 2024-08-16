@@ -8,19 +8,14 @@ interface CommentListComponentProps {
 }
 
 export const CommentListComponent = ({ postId }: CommentListComponentProps) => {
-  const { CommentList, fetchComments, setList } = useCommentStore();
+  const { CommentList, getComment } = useCommentStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchComments();
-      const filteredComments = Array.isArray(CommentList)
-        ? CommentList.filter((comment) => comment.postId === postId)
-        : [];
-      setList(filteredComments);
+      await getComment(postId);
     };
-
     fetchData();
-  }, [fetchComments, postId, setList]);
+  }, []);
 
   if (
     !CommentList ||
