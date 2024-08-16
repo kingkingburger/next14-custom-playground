@@ -28,7 +28,6 @@ interface CommentState {
     token: string | null,
   ) => Promise<void>;
   CommentList: CommentData | CommentData[] | null;
-  fetchComments: () => Promise<void>;
   getComment: (id: string) => Promise<void>;
   setList: (list: CommentData[]) => void;
   setSelectComment: (Comment: CommentData) => void;
@@ -43,18 +42,7 @@ const useCommentStore = create<CommentState>((set, get) => ({
       const response = await ky
         .post(`${process.env.NEXT_PUBLIC_SERVER}/comment`, { json: form })
         .json();
-      console.log("response = ", response);
-      set({ CommentList: response.data });
-    } catch (error) {
-      console.error("Failed to fetch comments", error);
-    }
-  },
 
-  fetchComments: async () => {
-    try {
-      const response = await ky
-        .get(`${process.env.NEXT_PUBLIC_SERVER}/api/comment`)
-        .json<CommentType>();
       set({ CommentList: response.data });
     } catch (error) {
       console.error("Failed to fetch comments", error);
