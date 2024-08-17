@@ -15,6 +15,7 @@ export const CommentListComponent = ({ postId }: CommentListComponentProps) => {
       await getComment(postId);
     };
     fetchData();
+    console.log("CommentList = ", CommentList);
   }, []);
 
   if (

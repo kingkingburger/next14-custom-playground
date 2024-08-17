@@ -52,7 +52,7 @@ const useCommentStore = create<CommentState>((set, get) => ({
   getComment: async (id: number) => {
     try {
       const response = await ky
-        .get(`${process.env.NEXT_PUBLIC_SERVER}/api/comment/id/${id}`)
+        .get(`${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${id}`)
         .json<CommentType>();
       set({ selectComment: response.data });
     } catch (error) {
