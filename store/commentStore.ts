@@ -2,12 +2,6 @@ import { create } from "zustand";
 import ky from "@toss/ky";
 import { CommentFormData } from "@/components/comment/commentInput";
 
-interface CommentType {
-  message: string;
-  code: number;
-  data: CommentData;
-}
-
 interface CommentData {
   id: string;
   postId: number;
@@ -22,47 +16,53 @@ interface CommentData {
 }
 
 interface CommentState {
-  selectComment?: CommentData | null;
-  createComments: (
+  commentList: CommentData[];
+  isLoading: boolean;
+  error: string | null;
+  createComment: (
     formData: CommentFormData,
     token: string | null,
   ) => Promise<void>;
-  CommentList: CommentData | CommentData[] | null;
-  getComment: (id: number) => Promise<void>;
-  setList: (list: CommentData[]) => void;
-  setSelectComment: (Comment: CommentData) => void;
+  getComments: (postId: number) => Promise<void>;
+  setCommentList: (list: CommentData[]) => void;
 }
 
 const useCommentStore = create<CommentState>((set, get) => ({
-  selectComment: null,
-  CommentList: null,
+  commentList: [],
+  isLoading: false,
+  error: null,
 
-  createComments: async (form: CommentFormData, token: string | null) => {
+  createComment: async (form: CommentFormData, token: string | null) => {
+    set({ isLoading: true, error: null });
     try {
       const response = await ky
         .post(`${process.env.NEXT_PUBLIC_SERVER}/comment`, { json: form })
-        .json();
+        .json<{ data: CommentData }>();
 
-      set({ CommentList: response.data });
+      set((state) => ({
+        commentList: [...state.commentList, response.data],
+        isLoading: false,
+      }));
     } catch (error) {
-      console.error("Failed to fetch comments", error);
+      console.error("Failed to create comment", error);
+      set({ error: "댓글 생성에 실패했습니다.", isLoading: false });
     }
   },
 
-  getComment: async (id: number) => {
+  getComments: async (postId: number) => {
+    set({ isLoading: true, error: null });
     try {
       const response = await ky
-        .get(`${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${id}`)
-        .json<CommentType>();
-      set({ selectComment: response.data });
+        .get(`${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${postId}`)
+        .json<{ data: CommentData[] }>();
+      set({ commentList: response.data, isLoading: false });
     } catch (error) {
-      console.error(`Failed to fetch comment with id ${id}`, error);
+      console.error(`Failed to fetch comments for post ${postId}`, error);
+      set({ error: "댓글을 불러오는데 실패했습니다.", isLoading: false });
     }
   },
 
-  setList: (list: CommentData[]) => set({ CommentList: list }),
-
-  setSelectComment: (Comment: CommentData) => set({ selectComment: Comment }),
+  setCommentList: (list: CommentData[]) => set({ commentList: list }),
 }));
 
 export default useCommentStore;
