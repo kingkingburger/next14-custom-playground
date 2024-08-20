@@ -20,8 +20,8 @@ export const CommentListComponent = ({ postId }: commentListComponentProps) => {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-semibold">댓글 목록</h3>
-      {Array.isArray(commentList) &&
+      <h3 className="text-xl font-semibold">댓글</h3>
+      {commentList &&
         commentList.map((comment) => (
           <div key={comment.id} className="p-4 border rounded-md">
             <div className="flex justify-between items-center mb-2">
