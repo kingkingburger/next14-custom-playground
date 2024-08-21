@@ -19,7 +19,7 @@ export const CommentListComponent = ({ postId }: commentListComponentProps) => {
   if (commentList.length === 0) return <p>댓글이 없습니다.</p>;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-2xl mx-auto p-8">
       <h3 className="text-xl font-semibold">댓글</h3>
       {commentList &&
         commentList.map((comment) => (
