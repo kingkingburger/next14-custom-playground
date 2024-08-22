@@ -40,7 +40,7 @@ export default function HomePage() {
 
     window.addEventListener("focus", handleFocus);
     return () => window.removeEventListener("focus", handleFocus);
-  }, []);
+  }, [postList]);
 
   if (loading) {
     return <HomeLoading />;
