@@ -92,7 +92,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>댓글 내용</FormLabel>
+                <FormLabel></FormLabel>
                 <FormControl>
                   <Input
                     placeholder="댓글을 입력해주세요"
