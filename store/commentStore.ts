@@ -1,68 +1,119 @@
 import { create } from "zustand";
-import ky from "@toss/ky";
-import { CommentFormData } from "@/components/comment/commentInput";
+import axios from "axios";
 
-interface CommentData {
-  id: string;
-  postId: number;
-  userId: number;
-  parentId: number;
+export interface Comment {
+  id: number;
   content: string;
-  createdAt: string;
-  updatedAt: string;
+  userId: number;
+  postId: number;
+  parentId: number | null;
   User: {
     name: string;
   };
+  createdAt: string;
+  replies?: Comment[];
 }
 
-interface CommentState {
-  commentList: CommentData[];
+interface CommentStore {
+  commentList: Comment[];
   isLoading: boolean;
   error: string | null;
-  createComment: (
-    formData: CommentFormData,
-    token: string | null,
-  ) => Promise<void>;
   getComments: (postId: number) => Promise<void>;
-  setCommentList: (list: CommentData[]) => void;
+  createComment: (comment: Partial<Comment>, token: string) => Promise<void>;
+  createReply: (
+    reply: Partial<Comment>,
+    parentId: number,
+    token: string,
+  ) => Promise<void>;
 }
 
-const useCommentStore = create<CommentState>((set, get) => ({
+const useCommentStore = create<CommentStore>((set) => ({
   commentList: [],
   isLoading: false,
   error: null,
 
-  createComment: async (form: CommentFormData, token: string | null) => {
-    set({ isLoading: true, error: null });
+  getComments: async (postId: number) => {
+    set({ isLoading: true });
     try {
-      const response = await ky
-        .post(`${process.env.NEXT_PUBLIC_SERVER}/comment`, { json: form })
-        .json<{ data: CommentData }>();
+      const response = await axios.get(`/api/comments?postId=${postId}`);
+      const comments = response.data;
 
+      // 댓글을 계층 구조로 변환
+      const commentMap = new Map();
+      const rootComments: Comment[] = [];
+
+      comments.forEach((comment: Comment) => {
+        comment.replies = [];
+        commentMap.set(comment.id, comment);
+
+        if (comment.parentId === null) {
+          rootComments.push(comment);
+        } else {
+          const parentComment = commentMap.get(comment.parentId);
+          if (parentComment) {
+            parentComment.replies?.push(comment);
+          }
+        }
+      });
+
+      set({ commentList: rootComments, isLoading: false });
+    } catch (error) {
+      set({ error: "댓글을 불러오는 데 실패했습니다.", isLoading: false });
+    }
+  },
+
+  createComment: async (comment: Partial<Comment>, token: string) => {
+    try {
+      const response = await axios.post("/api/comments", comment, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const newComment = response.data;
       set((state) => ({
-        commentList: [...state.commentList, response.data],
-        isLoading: false,
+        commentList: [...state.commentList, newComment],
       }));
     } catch (error) {
-      console.error("Failed to create comment", error);
-      set({ error: "댓글 생성에 실패했습니다.", isLoading: false });
+      set({ error: "댓글 작성에 실패했습니다." });
     }
   },
 
-  getComments: async (postId: number) => {
-    set({ isLoading: true, error: null });
+  createReply: async (
+    reply: Partial<Comment>,
+    parentId: number,
+    token: string,
+  ) => {
     try {
-      const response = await ky
-        .get(`${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${postId}`)
-        .json<{ data: CommentData[] }>();
-      set({ commentList: response.data, isLoading: false });
+      const response = await axios.post(
+        "/api/comments",
+        { ...reply, parentId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      const newReply = response.data;
+      set((state) => {
+        const updateReplies = (comments: Comment[]): Comment[] => {
+          return comments.map((comment) => {
+            if (comment.id === parentId) {
+              return {
+                ...comment,
+                replies: [...(comment.replies || []), newReply],
+              };
+            } else if (comment.replies) {
+              return {
+                ...comment,
+                replies: updateReplies(comment.replies),
+              };
+            }
+            return comment;
+          });
+        };
+
+        return { commentList: updateReplies(state.commentList) };
+      });
     } catch (error) {
-      console.error(`Failed to fetch comments for post ${postId}`, error);
-      set({ error: "댓글을 불러오는데 실패했습니다.", isLoading: false });
+      set({ error: "대댓글 작성에 실패했습니다." });
     }
   },
-
-  setCommentList: (list: CommentData[]) => set({ commentList: list }),
 }));
 
 export default useCommentStore;
