@@ -48,7 +48,7 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </main>
-      <CommentListComponent postId={+post.id} />
+      <CommentListComponent params={{ id: post.id }} />
       <CommentInputComponent params={{ id: post.id }} />
     </div>
   );

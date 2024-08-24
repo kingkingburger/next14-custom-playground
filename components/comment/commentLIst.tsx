@@ -4,14 +4,16 @@ import React, { useEffect } from "react";
 import useCommentStore from "@/store/commentStore";
 
 interface commentListComponentProps {
-  postId: number;
+  params: {
+    id: string;
+  };
 }
 
-export const CommentListComponent = ({ postId }: commentListComponentProps) => {
+export const CommentListComponent = ({ params }: commentListComponentProps) => {
   const { commentList, getComments, isLoading, error } = useCommentStore();
 
   useEffect(() => {
-    getComments(postId);
+    getComments(+params.id);
   }, []);
 
   if (isLoading) return <p>로딩 중...</p>;
