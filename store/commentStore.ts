@@ -35,7 +35,9 @@ const useCommentStore = create<CommentStore>((set) => ({
   getComments: async (postId: number) => {
     set({ isLoading: true });
     try {
-      const response = await axios.get(`/api/comments?postId=${postId}`);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${postId}`,
+      );
       const comments = response.data;
 
       // 댓글을 계층 구조로 변환
@@ -55,7 +57,7 @@ const useCommentStore = create<CommentStore>((set) => ({
           }
         }
       });
-
+      console.log("comments = ", comments);
       set({ commentList: rootComments, isLoading: false });
     } catch (error) {
       set({ error: "댓글을 불러오는 데 실패했습니다.", isLoading: false });
