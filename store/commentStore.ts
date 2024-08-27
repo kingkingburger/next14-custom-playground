@@ -44,21 +44,7 @@ const useCommentStore = create<CommentStore>((set) => ({
       const commentMap = new Map();
       const rootComments: Comment[] = [];
 
-      comments.forEach((comment: Comment) => {
-        comment.replies = [];
-        commentMap.set(comment.id, comment);
-
-        if (comment.parentId === null) {
-          rootComments.push(comment);
-        } else {
-          const parentComment = commentMap.get(comment.parentId);
-          if (parentComment) {
-            parentComment.replies?.push(comment);
-          }
-        }
-      });
-      console.log("comments = ", comments);
-      set({ commentList: rootComments, isLoading: false });
+      set({ commentList: comments.data, isLoading: false });
     } catch (error) {
       set({ error: "댓글을 불러오는 데 실패했습니다.", isLoading: false });
     }
