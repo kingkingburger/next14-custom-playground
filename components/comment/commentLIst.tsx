@@ -2,6 +2,8 @@
 
 import React, { useEffect } from "react";
 import useCommentStore from "@/store/commentStore";
+import { formatDistanceToNow } from "date-fns";
+import { ko } from "date-fns/locale";
 
 interface commentListComponentProps {
   params: {
@@ -28,9 +30,17 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
           <div key={comment.id} className="p-4 border rounded-md">
             <div className="flex justify-between items-center mb-2">
               <span className="font-bold">{comment.User.name}</span>
-              <span className="text-sm text-gray-500">
-                {new Date(comment.createdAt).toLocaleString()}
-              </span>
+              <div className="text-right">
+                <span className="block">
+                  {formatDistanceToNow(new Date(comment?.createdAt), {
+                    addSuffix: true,
+                    locale: ko,
+                  })}
+                </span>
+                <span className="block text-sm text-gray-500">
+                  {new Date(comment.createdAt).toLocaleString()}
+                </span>
+              </div>
             </div>
             <p>{comment.content}</p>
           </div>
