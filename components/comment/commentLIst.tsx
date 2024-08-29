@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import useCommentStore from "@/store/commentStore";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
+import dayjs from "dayjs";
 
 interface commentListComponentProps {
   params: {
@@ -38,7 +39,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
                   })}
                 </span>
                 <span className="block text-sm text-gray-500">
-                  {new Date(comment.createdAt).toLocaleString()}
+                  {dayjs(comment.createdAt).toLocaleString()}
                 </span>
               </div>
             </div>

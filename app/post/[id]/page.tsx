@@ -34,13 +34,17 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
             <FaEye />
             <span>{post.viewCount}</span>
           </div>
-          <span>{dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</span>
-          <span>
-            {formatDistanceToNow(new Date(post?.createdAt), {
-              addSuffix: true,
-              locale: ko,
-            })}
-          </span>
+          <div className="text-right">
+            <span className="block">
+              {formatDistanceToNow(new Date(post?.createdAt), {
+                addSuffix: true,
+                locale: ko,
+              })}
+            </span>
+            <span className="block text-sm text-gray-500">
+              {dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+            </span>
+          </div>
         </div>
 
         <div
