@@ -30,20 +30,23 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
         <h1 className="text-4xl font-bold mb-4 text-white">{post?.title}</h1>
         <div className="flex justify-between items-center mb-4 text-gray-400">
           <span>ID: {post?.User.name}</span>
-          <div className="mx-2 flex items-center space-x-1">
-            <FaEye />
-            <span>{post.viewCount}</span>
-          </div>
+
           <div className="text-right">
-            <span className="block">
-              {formatDistanceToNow(new Date(post?.createdAt), {
-                addSuffix: true,
-                locale: ko,
-              })}
-            </span>
-            <span className="block text-sm text-gray-500">
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <FaEye />
+                <span>{post.viewCount}</span>
+              </div>
+              <span>
+                {formatDistanceToNow(new Date(post?.createdAt), {
+                  addSuffix: true,
+                  locale: ko,
+                })}
+              </span>
+            </div>
+            <div className="text-sm text-gray-500 mt-1">
               {dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}
-            </span>
+            </div>
           </div>
         </div>
 
