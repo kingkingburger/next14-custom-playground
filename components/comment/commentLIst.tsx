@@ -39,7 +39,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
                   })}
                 </span>
                 <span className="block text-sm text-gray-500">
-                  {dayjs(comment.createdAt).toLocaleString()}
+                  {dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm:ss")}
                 </span>
               </div>
             </div>
