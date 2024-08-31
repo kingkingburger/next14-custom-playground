@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { FaEye, FaThumbsUp } from "react-icons/fa";
@@ -9,6 +9,7 @@ import thumnail from "/public/images/default-thumnail.png";
 import { ko } from "date-fns/locale";
 import ApiService, { PostData } from "@/lib/fetch";
 import HomeLoading from "@/app/(main)/loading";
+import dayjs from "dayjs";
 
 const apiService = new ApiService();
 
@@ -68,18 +69,24 @@ export default function HomePage() {
                       {post.User?.name}
                     </div>
                     <div className="mx-2 flex items-center space-x-1">
-                      {formatDistanceToNow(new Date(post.createdAt), {
-                        addSuffix: true,
-                        locale: ko,
-                      })}
-                    </div>
-                    <div className="mx-2 flex items-center space-x-1">
                       <FaEye />
                       <span>{post.viewCount}</span>
                     </div>
                     <div className="mx-2 flex items-center space-x-1">
                       <FaThumbsUp />
                       <span>{post.recommendCount}</span>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="block">
+                        {formatDistanceToNow(new Date(post?.createdAt), {
+                          addSuffix: true,
+                          locale: ko,
+                        })}
+                      </span>
+                      <span className="block text-sm text-gray-500">
+                        {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                      </span>
                     </div>
                   </div>
                 </div>
