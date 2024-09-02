@@ -85,7 +85,7 @@ export default function HomePage() {
                         })}
                       </span>
                       <span className="block text-sm text-gray-500">
-                        {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                        {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm")}
                       </span>
                     </div>
                   </div>

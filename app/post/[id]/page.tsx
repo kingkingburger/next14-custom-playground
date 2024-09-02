@@ -45,7 +45,7 @@ export default async function PostIdPageClient({ params }: PostIdPageProps) {
               </span>
             </div>
             <div className="text-sm text-gray-500 mt-1">
-              {dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+              {dayjs(post?.createdAt).format("YYYY-MM-DD HH:mm")}
             </div>
           </div>
         </div>
