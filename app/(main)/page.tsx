@@ -65,7 +65,7 @@ export default function HomePage() {
                 <div className="flex flex-col justify-between w-full">
                   <h2 className="text-white font-bold text-lg">{post.title}</h2>
                   <div className="flex items-center text-gray-400 mt-2">
-                    <div className="mx-2 flex items-center space-x-1">
+                    <div className="mr-2 flex items-center space-x-1">
                       <span>{post.User?.name}</span>
                     </div>
                     <div className="mx-2 flex items-center space-x-1">
