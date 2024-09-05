@@ -75,6 +75,15 @@ class ApiService {
       throw error;
     }
   }
+
+  public async recommendCountUp(id: string) {
+    try {
+      await axios.put(`${this.serverUrl}/post/count/up/id/${id}`);
+    } catch (error: any) {
+      console.error("Failed to fetch posts:", error.message);
+      throw error;
+    }
+  }
 }
 
 export default ApiService;
