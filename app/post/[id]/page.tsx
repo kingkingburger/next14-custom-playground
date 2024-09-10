@@ -35,8 +35,10 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     fetchPost();
   }, [params.id]);
 
-  const handleLikeClick = () => {
+  const handleLikeClick = async () => {
     setIsLiked(!isLiked);
+    const apiService = new ApiService();
+    await apiService.recommendCountChange(params.id, "up");
     // Here you would typically also send a request to your backend to update the like status
   };
 

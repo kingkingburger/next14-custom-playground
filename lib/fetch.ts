@@ -79,7 +79,7 @@ class ApiService {
   public async recommendCountChange(id: string, status: string) {
     try {
       await axios.put(
-        `${this.serverUrl}/recommendCount/id/${id}/status/${status}`,
+        `${this.serverUrl}/post/recommendCount/id/${id}/status/${status}`,
       );
     } catch (error: any) {
       console.error("Failed to fetch posts:", error.message);
