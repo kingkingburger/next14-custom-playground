@@ -69,17 +69,20 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
             <div className="text-sm text-gray-500 mt-1">
               {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm")}
             </div>
-            <button
-              onClick={handleLikeClick}
-              className="flex items-center space-x-1 text-gray-300 hover:text-blue-500 transition-colors duration-200 mt-2 ml-auto"
-            >
-              {isLiked ? (
-                <AiFillLike className="text-blue-500" />
-              ) : (
-                <AiOutlineLike />
-              )}
-              <span>좋아요</span>
-            </button>
+            <div className="flex items-center space-x-1 text-gray-400">
+              <div>{post.recommendCount}</div>
+              <button
+                onClick={handleLikeClick}
+                className="flex items-center space-x-1 text-gray-300 hover:text-blue-500 transition-colors duration-200 mt-2 ml-auto"
+              >
+                {isLiked ? (
+                  <AiFillLike className="text-blue-500" />
+                ) : (
+                  <AiOutlineLike />
+                )}
+                <span>좋아요</span>
+              </button>
+            </div>
           </div>
         </div>
         <div
