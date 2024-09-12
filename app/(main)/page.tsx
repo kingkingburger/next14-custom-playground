@@ -54,7 +54,7 @@ export default function HomePage() {
         <main className="flex flex-col space-y-2">
           {postList.map((post: PostData) => (
             <Link key={post.id} href={`post/${post.id}`} passHref>
-              <div className="bg-gray-800 p-4 rounded-lg shadow-lg transition-transform transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
+              <div className="bg-gray-800 py-1 px-2 rounded-lg shadow-lg transition-transform transform hover:bg-gray-700 hover:scale-105 flex space-x-4">
                 <Image
                   src={thumnail}
                   alt={post.title}
