@@ -52,7 +52,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
       <main className="max-w-3xl mx-auto p-6 bg-gray-800 rounded-lg shadow-lg mt-10 border border-gray-700">
         <div className="flex justify-between items-start mb-6">
           <h1 className="text-4xl font-bold text-white">{post.title}</h1>
-          <div className="text-right">
+          <div className="text-right space-y-2.5">
             <div className="text-gray-400 mb-2">ID: {post.User.name}</div>
             <div className="flex items-center justify-end space-x-2 text-gray-400">
               <div className="flex items-center space-x-1">
