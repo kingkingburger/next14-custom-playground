@@ -48,8 +48,8 @@ export default function HomePage() {
   }
 
   return (
-    <div className=" flex items-center justify-center bg-gray-900">
-      <div className="w-full max-w-3xl">
+    <div className="flex justify-center bg-gray-900">
+      <div className="w-full max-w-3xl pt-6">
         <h1 className="text-white text-2xl font-semibold mb-6">전체 인기글</h1>
         <main className="flex flex-col space-y-2">
           {postList.map((post: PostData) => (
@@ -63,8 +63,10 @@ export default function HomePage() {
                   className="w-16 h-16 rounded object-cover"
                 />
                 <div className="flex flex-col justify-between w-full">
-                  <h2 className="text-white font-bold text-lg">{post.title}</h2>
-                  <div className="flex items-center text-gray-400 mt-2">
+                  <h2 className="text-white font-bold text-lg mt-2">
+                    {post.title}
+                  </h2>
+                  <div className="flex items-center text-gray-400">
                     <div className="mr-2 flex items-center space-x-1">
                       <span>{post.User?.name}</span>
                     </div>
