@@ -10,6 +10,7 @@ import { FaEye } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import CommentInputComponent from "@/components/comment/commentInput";
 import CommentListComponent from "@/components/comment/commentLIst";
+import PostLoading from "@/app/post/loading";
 
 interface PostIdPageProps {
   params: { id: string };
@@ -42,7 +43,12 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     // Here you would typically also send a request to your backend to update the like status
   };
 
-  if (loading) return <div className="text-white">Loading...</div>;
+  if (loading)
+    return (
+      <div className="text-white">
+        <PostLoading />
+      </div>
+    );
   if (!post) return <div className="text-white">Post not found</div>;
 
   const sanitizedContent = DOMPurify.sanitize(post.content);
@@ -85,6 +91,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
             </div>
           </div>
         </div>
+
         <div
           className="text-lg text-gray-300"
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
