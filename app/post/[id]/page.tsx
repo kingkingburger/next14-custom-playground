@@ -43,12 +43,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     // Here you would typically also send a request to your backend to update the like status
   };
 
-  if (loading)
-    return (
-      <div className="text-white">
-        <PostLoading />
-      </div>
-    );
+  if (loading) return <PostLoading />;
   if (!post) return <div className="text-white">Post not found</div>;
 
   const sanitizedContent = DOMPurify.sanitize(post.content);
@@ -58,8 +53,25 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
       <main className="max-w-3xl mx-auto p-6 bg-gray-800 rounded-lg shadow-lg mt-10 border border-gray-700">
         <div className="flex justify-between items-start mb-6">
           <h1 className="text-4xl font-bold text-white">{post.title}</h1>
-          <div className="text-right space-y-2.5">
-            <div className="text-gray-400 mb-2">ID: {post.User.name}</div>
+          <div className="grid grid-cols-2 gap-4 text-right">
+            <div className="text-gray-400">ID: {post.User.name}</div>
+            <div className="text-sm text-gray-500">
+              {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm")}
+            </div>
+            <div className="flex items-center space-x-1 text-gray-400 justify-self-end">
+              <div>{post.recommendCount}</div>
+              <button
+                onClick={handleLikeClick}
+                className="flex items-center space-x-1 text-gray-300 hover:text-blue-500 transition-colors duration-200"
+              >
+                {isLiked ? (
+                  <AiFillLike className="text-blue-500" />
+                ) : (
+                  <AiOutlineLike />
+                )}
+                <span>좋아요</span>
+              </button>
+            </div>
             <div className="flex items-center justify-end space-x-2 text-gray-400">
               <div className="flex items-center space-x-1">
                 <FaEye />
@@ -71,23 +83,6 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
                   locale: ko,
                 })}
               </span>
-            </div>
-            <div className="text-sm text-gray-500 mt-1">
-              {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm")}
-            </div>
-            <div className="flex items-center space-x-1  text-gray-400">
-              <div>{post.recommendCount}</div>
-              <button
-                onClick={handleLikeClick}
-                className="flex items-center space-x-1 text-gray-300 hover:text-blue-500 transition-colors duration-200 "
-              >
-                {isLiked ? (
-                  <AiFillLike className="text-blue-500" />
-                ) : (
-                  <AiOutlineLike />
-                )}
-                <span>좋아요</span>
-              </button>
             </div>
           </div>
         </div>
