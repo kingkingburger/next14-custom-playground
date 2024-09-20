@@ -29,20 +29,22 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
       {commentList &&
         commentList.map((comment) => (
           <div key={comment.id} className="p-4 border rounded-md">
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-bold">{comment.User.name}</span>
-              <div className="text-right">
-                <span className="block text-sm text-gray-500">
-                  {dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")}
-                </span>
-                <span className="block">
-                  {formatDistanceToNow(new Date(comment?.createdAt), {
-                    addSuffix: true,
-                    locale: ko,
-                  })}
+            <div className="mb-2">
+              <div className="flex items-center">
+                <span className="font-bold">{comment.User.name}</span>
+                <span className="ml-2 text-sm text-gray-500">
+                  • {dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")}
                 </span>
               </div>
+
+              <div className="text-sm text-gray-500">
+                {formatDistanceToNow(new Date(comment.createdAt), {
+                  addSuffix: true,
+                  locale: ko,
+                })}
+              </div>
             </div>
+            <hr className="my-3" />
             <p>{comment.content}</p>
           </div>
         ))}
