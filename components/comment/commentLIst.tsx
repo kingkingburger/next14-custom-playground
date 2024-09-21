@@ -33,7 +33,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
               <div>
                 <span className="font-bold">{comment.User.name}</span>
               </div>
-              <div className="flex justify-end items-center space-x-2 flex-wrap">
+              <div className="flex justify-end items-baseline space-x-2 flex-wrap">
                 <div className="text-sm text-gray-500">
                   {dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")}
                 </div>
