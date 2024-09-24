@@ -5,6 +5,7 @@ import useCommentStore from "@/store/commentStore";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import dayjs from "dayjs";
+import { NotHaveComment } from "@/components/comment/notHaveComment";
 
 interface commentListComponentProps {
   params: {
@@ -21,7 +22,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
 
   if (isLoading) return <p>로딩 중...</p>;
   if (error) return <p>{error}</p>;
-  if (commentList.length === 0) return <p>댓글이 없습니다.</p>;
+  if (commentList.length === 0) return <NotHaveComment />;
 
   return (
     <div className="space-y-4 max-w-2xl mx-auto p-8">
