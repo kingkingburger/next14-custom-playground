@@ -51,30 +51,25 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   return (
     <div className="bg-gray-900 min-h-screen p-4">
       <main className="max-w-3xl mx-auto p-6 bg-gray-800 rounded-lg shadow-lg mt-10 border border-gray-700">
-        <div className="flex justify-between items-start mb-6">
-          <h1 className="text-4xl font-bold text-white">{post.title}</h1>
-          <div className="grid grid-cols-2 gap-4 text-right">
-            <div className="text-gray-400">ID: {post.User.name}</div>
+        <div className="mb-6">
+          <h1 className="text-4xl font-bold text-white mb-4">{post.title}</h1>
+          <div className="text-right text-gray-400">
+            <div>ID: {post.User.name}</div>
             <div className="text-sm text-gray-500">
               {dayjs(post.createdAt).format("YYYY-MM-DD HH:mm")}
             </div>
-            <div className="flex items-center space-x-1 text-gray-400 justify-self-end">
-              <div>{post.recommendCount}</div>
+            <div className="flex items-center justify-end space-x-2">
               <button
                 onClick={handleLikeClick}
                 className="flex items-center space-x-1 text-gray-300 hover:text-blue-500 transition-colors duration-200"
               >
-                <div className="mx-auto">
-                  {isLiked ? (
-                    <AiFillLike className="text-blue-500" />
-                  ) : (
-                    <AiOutlineLike />
-                  )}
-                </div>
-                <span>좋아요</span>
+                {isLiked ? (
+                  <AiFillLike className="text-blue-500" />
+                ) : (
+                  <AiOutlineLike />
+                )}
+                <span>{post.recommendCount}</span>
               </button>
-            </div>
-            <div className="flex items-center justify-end space-x-2 text-gray-400">
               <div className="flex items-center space-x-1">
                 <FaEye />
                 <span>{post.viewCount}</span>
