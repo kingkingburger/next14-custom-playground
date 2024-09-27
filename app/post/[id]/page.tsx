@@ -64,11 +64,13 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
                 onClick={handleLikeClick}
                 className="flex items-center space-x-1 text-gray-300 hover:text-blue-500 transition-colors duration-200"
               >
-                {isLiked ? (
-                  <AiFillLike className="text-blue-500" />
-                ) : (
-                  <AiOutlineLike />
-                )}
+                <div className="mx-auto">
+                  {isLiked ? (
+                    <AiFillLike className="text-blue-500" />
+                  ) : (
+                    <AiOutlineLike />
+                  )}
+                </div>
                 <span>좋아요</span>
               </button>
             </div>
