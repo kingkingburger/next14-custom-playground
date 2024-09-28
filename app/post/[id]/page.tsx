@@ -11,6 +11,7 @@ import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import CommentInputComponent from "@/components/comment/commentInput";
 import CommentListComponent from "@/components/comment/commentLIst";
 import PostLoading from "@/app/post/loading";
+import { NotHavePost } from "@/components/post/noHavePost";
 
 interface PostIdPageProps {
   params: { id: string };
@@ -40,11 +41,10 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     setIsLiked(!isLiked);
     const apiService = new ApiService();
     await apiService.recommendCountChange(params.id, "up");
-    // Here you would typically also send a request to your backend to update the like status
   };
 
   if (loading) return <PostLoading />;
-  if (!post) return <div className="text-white">Post not found</div>;
+  if (!post) return <NotHavePost />;
 
   const sanitizedContent = DOMPurify.sanitize(post.content);
 
