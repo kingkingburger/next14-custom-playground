@@ -22,7 +22,7 @@ import {
   errorToast,
 } from "@/components/errorToast/post/errorToast";
 import { payload } from "@/store/auth/type";
-import { getCurrentUserInfo } from "@/lib/current-profile";
+import { useCurrentUserInfo } from "@/lib/current-profile";
 
 const formSchema = z.object({
   content: z.string().min(3, { message: "댓글은 최소 3글자가 필요해요" }),
@@ -50,7 +50,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
     setIsMounted(true);
   }, []);
 
-  getCurrentUserInfo(setUserInfo, isAuthenticated);
+  useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const form = useForm({
     resolver: zodResolver(formSchema),

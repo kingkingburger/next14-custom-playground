@@ -22,7 +22,7 @@ import {
   errorToast,
 } from "@/components/errorToast/post/errorToast";
 import TiptapComponent from "@/components/tiptaps/TiptapComponent";
-import { getCurrentUserInfo } from "@/lib/current-profile";
+import { useCurrentUserInfo } from "@/lib/current-profile";
 import { payload } from "@/store/auth/type";
 
 const formSchema = z.object({
@@ -45,7 +45,7 @@ const NewPost = () => {
     setIsMounted(true);
   }, []);
 
-  getCurrentUserInfo(setUserInfo, isAuthenticated);
+  useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const form = useForm({
     resolver: zodResolver(formSchema),

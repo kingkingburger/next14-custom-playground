@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ModeToggle } from "@/components/dark-mode-toggle";
-import { getCurrentUserInfo } from "@/lib/current-profile";
+import { useCurrentUserInfo } from "@/lib/current-profile";
 import { useState } from "react";
 import { payload } from "@/store/auth/type";
 import { useAuthStore } from "@/store/auth/auth";
@@ -16,10 +16,11 @@ import {
 
 export default function MainHeader() {
   const [userInfo, setUserInfo] = useState<payload | null>(null);
+
   const { signOut, isAuthenticated } = useAuthStore();
   const router = useRouter();
 
-  getCurrentUserInfo(setUserInfo, isAuthenticated);
+  useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const handleLogout = async () => {
     signOut();
