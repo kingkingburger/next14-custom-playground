@@ -25,7 +25,7 @@ import { payload } from "@/store/auth/type";
 import { useCurrentUserInfo } from "@/lib/current-profile";
 
 const formSchema = z.object({
-  content: z.string().min(3, { message: "댓글은 최소 3글자가 필요해요" }),
+  content: z.string().optional(),
   userId: z.number().optional(),
   postId: z.number().optional(),
 });
