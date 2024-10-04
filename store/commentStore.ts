@@ -52,14 +52,19 @@ const useCommentStore = create<CommentStore>((set) => ({
 
   createComment: async (comment: Partial<Comment>, token: string) => {
     try {
-      const response = await axios.post("/api/comments", comment, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER}/comment`,
+        comment,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       const newComment = response.data;
       set((state) => ({
         commentList: [...state.commentList, newComment],
       }));
     } catch (error) {
+      console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });
     }
   },
