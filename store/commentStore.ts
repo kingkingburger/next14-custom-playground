@@ -25,6 +25,7 @@ interface CommentStore {
     parentId: number,
     token: string,
   ) => Promise<void>;
+  deleteComment: (commentId: number, token: string) => Promise<void>;
 }
 
 const useCommentStore = create<CommentStore>((set) => ({
@@ -105,6 +106,24 @@ const useCommentStore = create<CommentStore>((set) => ({
       });
     } catch (error) {
       set({ error: "대댓글 작성에 실패했습니다." });
+    }
+  },
+
+  deleteComment: async (commentId: number, token: string) => {
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER}/comment/id/${commentId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      const newComment = response.data;
+      set((state) => ({
+        commentList: [...state.commentList, newComment],
+      }));
+    } catch (error) {
+      console.log("error = ", error);
+      set({ error: "댓글 작성에 실패했습니다." });
     }
   },
 }));

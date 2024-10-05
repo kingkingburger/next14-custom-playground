@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import dayjs from "dayjs";
 import { NotHaveComment } from "@/components/comment/notHaveComment";
+import { errorToast } from "@/components/errorToast/post/errorToast";
 
 interface commentListComponentProps {
   params: {
@@ -14,11 +15,23 @@ interface commentListComponentProps {
 }
 
 export const CommentListComponent = ({ params }: commentListComponentProps) => {
-  const { commentList, getComments, isLoading, error } = useCommentStore();
+  const { commentList, getComments, isLoading, error, deleteComment } =
+    useCommentStore();
 
   useEffect(() => {
     getComments(+params.id);
   }, []);
+
+  const handleDelete = async (commentId: number) => {
+    if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+      const token = localStorage.getItem("access-token");
+      if (!token) {
+        errorToast("로그인이 필요합니다.");
+        return;
+      }
+      await deleteComment(commentId, token);
+    }
+  };
 
   if (isLoading) return <p>로딩 중...</p>;
   if (error) return <p>{error}</p>;
@@ -44,7 +57,12 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
                     locale: ko,
                   })}
                 </div>
-                <div className="mt-2">댓글</div>
+                <button
+                  onClick={() => handleDelete(comment.id)}
+                  className="ml-2 text-red-500 hover:text-red-700"
+                >
+                  삭제
+                </button>
               </div>
             </div>
             <hr className="my-3" />
