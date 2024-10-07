@@ -29,7 +29,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
         errorToast("로그인이 필요합니다.");
         return;
       }
-      await deleteComment(commentId, token);
+      // await deleteComment(commentId, token);
     }
   };
 
