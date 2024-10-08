@@ -9,7 +9,7 @@ import { ko } from "date-fns/locale";
 import { FaEye } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import CommentInputComponent from "@/components/comment/commentInput";
-import CommentListComponent from "@/components/comment/commentLIst";
+import CommentListComponent from "@/components/comment/commentList";
 import PostLoading from "@/app/post/loading";
 import { NotHavePost } from "@/components/post/noHavePost";
 

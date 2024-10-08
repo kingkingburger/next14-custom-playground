@@ -65,7 +65,6 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
                 </button>
               </div>
             </div>
-            <hr className="my-3" />
             <p className="mt-2">{comment.content}</p>
           </div>
         ))}
