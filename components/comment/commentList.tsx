@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useCommentStore from "@/store/commentStore";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import dayjs from "dayjs";
 import { NotHaveComment } from "@/components/comment/notHaveComment";
 import { errorToast } from "@/components/errorToast/post/errorToast";
+import ConfirmModal from "@/components/modal/confirmModal";
 
 interface commentListComponentProps {
   params: {
@@ -15,6 +16,11 @@ interface commentListComponentProps {
 }
 
 export const CommentListComponent = ({ params }: commentListComponentProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
+    null,
+  );
+
   const { commentList, getComments, isLoading, error, deleteComment } =
     useCommentStore();
 
@@ -22,14 +28,26 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
     getComments(+params.id);
   }, []);
 
-  const handleDelete = async (commentId: number) => {
-    if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+  const openModal = (commentId: number) => {
+    setSelectedCommentId(commentId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCommentId(null);
+  };
+
+  const handleDelete = async () => {
+    if (selectedCommentId !== null) {
       const token = localStorage.getItem("access-token");
       if (!token) {
         errorToast("로그인이 필요합니다.");
+        closeModal();
         return;
       }
-      // await deleteComment(commentId, token);
+      await deleteComment(selectedCommentId, token);
+      closeModal();
     }
   };
 
@@ -58,11 +76,18 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
                   })}
                 </div>
                 <button
-                  onClick={() => handleDelete(comment.id)}
                   className="ml-2 text-red-500 hover:text-red-700"
+                  onClick={() => openModal(1)}
                 >
                   삭제
-                </button>
+                </button>{" "}
+                {isModalOpen && (
+                  <ConfirmModal
+                    message="정말로 이 댓글을 삭제하시겠습니까?"
+                    onConfirm={handleDelete}
+                    onCancel={closeModal}
+                  />
+                )}
               </div>
             </div>
             <p className="mt-2">{comment.content}</p>
