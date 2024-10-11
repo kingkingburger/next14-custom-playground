@@ -47,6 +47,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
         return;
       }
       await deleteComment(selectedCommentId, token);
+      await getComments(+params.id);
       closeModal();
     }
   };
@@ -77,7 +78,7 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
                 </div>
                 <button
                   className="ml-2 text-red-500 hover:text-red-700"
-                  onClick={() => openModal(1)}
+                  onClick={() => openModal(comment.id)}
                 >
                   삭제
                 </button>{" "}
