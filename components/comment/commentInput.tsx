@@ -60,16 +60,26 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
   });
 
   const onSubmit = async (values: CommentFormData) => {
-    if (userInfo) values.userId = userInfo.userId;
-    values.postId = parseInt(params.id, 10);
     const token = localStorage.getItem("access-token");
+
+    // 로그인 상태 확인
     if (!token) {
       errorToast("로그인이 필요합니다.");
+
+      // 필요 시 로그인 페이지로 리다이렉트
+      setTimeout(() => {
+        router.push("/login"); // 로그인 페이지로 이동
+      }, 500); // 0.5초 후 리다이렉트
+
       return;
     }
-    values.userId = userInfo?.userId;
 
+    // 댓글 작성
     try {
+      if (userInfo) values.userId = userInfo.userId;
+      values.postId = parseInt(params.id, 10);
+      values.userId = userInfo?.userId;
+
       await createComment(values, token);
       router.refresh(); // 댓글 작성 후 페이지를 새로고침하여 변경사항 반영
     } catch (error) {
