@@ -56,58 +56,44 @@ export const CommentListComponent = ({ params }: commentListComponentProps) => {
   if (error) return <p>{error}</p>;
   if (commentList.length === 0) return <NotHaveComment />;
 
-  // TODO 백엔드에서 create, delete 할 때 오는 객체들 통일 하기
   return (
     <div className="space-y-4 max-w-2xl mx-auto p-8">
       <h3 className="text-xl font-semibold">댓글</h3>
       {commentList &&
-        commentList.map((comment, index) => (
-          <div key={`${comment.id}-${index}`} className="p-4 border rounded-md">
+        commentList.map((comment) => (
+          <div key={comment.id} className="p-4 border rounded-md">
             <div className="mb-2 flex justify-between items-start">
               <div>
-                {/* User 객체가 존재하는지 먼저 확인 */}
-                <span className="font-bold">
-                  {comment.User ? comment.User.name : "알 수 없는 사용자"}
-                </span>
+                <span className="font-bold">{comment.User.name}</span>
               </div>
               <div className="flex justify-end items-baseline space-x-2 flex-wrap">
-                {comment.createdAt ? (
-                  <>
-                    <div className="text-sm text-gray-500">
-                      {dayjs(comment.createdAt).isValid()
-                        ? dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")
-                        : "알 수 없는 날짜"}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {dayjs(comment.createdAt).isValid()
-                        ? formatDistanceToNow(new Date(comment.createdAt), {
-                            addSuffix: true,
-                            locale: ko,
-                          })
-                        : ""}
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-sm text-gray-500">알 수 없는 날짜</div>
-                )}
+                <div className="text-sm text-gray-500">
+                  {dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {formatDistanceToNow(new Date(comment.createdAt), {
+                    addSuffix: true,
+                    locale: ko,
+                  })}
+                </div>
                 <button
                   className="ml-2 text-red-500 hover:text-red-700"
                   onClick={() => openModal(comment.id)}
                 >
                   삭제
-                </button>
+                </button>{" "}
+                {isModalOpen && (
+                  <ConfirmModal
+                    message="정말로 이 댓글을 삭제하시겠습니까?"
+                    onConfirm={handleDelete}
+                    onCancel={closeModal}
+                  />
+                )}
               </div>
             </div>
             <p className="mt-2">{comment.content}</p>
           </div>
         ))}
-      {isModalOpen && (
-        <ConfirmModal
-          message="정말로 이 댓글을 삭제하시겠습니까?"
-          onConfirm={handleDelete}
-          onCancel={closeModal}
-        />
-      )}
     </div>
   );
 };

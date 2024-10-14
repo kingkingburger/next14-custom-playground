@@ -117,10 +117,6 @@ const useCommentStore = create<CommentStore>((set) => ({
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      const newComment = response.data;
-      set((state) => ({
-        commentList: [...state.commentList, newComment],
-      }));
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });
