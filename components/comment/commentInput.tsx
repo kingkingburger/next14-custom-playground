@@ -67,9 +67,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
       errorToast("로그인이 필요합니다.");
 
       // 필요 시 로그인 페이지로 리다이렉트
-      setTimeout(() => {
-        router.push("/login"); // 로그인 페이지로 이동
-      }, 500); // 0.5초 후 리다이렉트
+      router.push("/login"); // 로그인 페이지로 이동
 
       return;
     }
