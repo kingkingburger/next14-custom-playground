@@ -40,11 +40,6 @@ const useCommentStore = create<CommentStore>((set) => ({
         `${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${postId}`,
       );
       const comments = response.data;
-
-      // 댓글을 계층 구조로 변환
-      const commentMap = new Map();
-      const rootComments: Comment[] = [];
-
       set({ commentList: comments.data, isLoading: false });
     } catch (error) {
       set({ error: "댓글을 불러오는 데 실패했습니다.", isLoading: false });
@@ -60,10 +55,6 @@ const useCommentStore = create<CommentStore>((set) => ({
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      const newComment = response.data;
-      set((state) => ({
-        commentList: [...state.commentList, newComment],
-      }));
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });

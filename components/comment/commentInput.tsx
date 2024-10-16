@@ -44,7 +44,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
 
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
-  const { createComment } = useCommentStore();
+  const { createComment, getComments } = useCommentStore();
 
   useEffect(() => {
     setIsMounted(true);
@@ -79,6 +79,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
       values.userId = userInfo?.userId;
 
       await createComment(values, token);
+      await getComments(values.postId);
       router.refresh(); // 댓글 작성 후 페이지를 새로고침하여 변경사항 반영
     } catch (error) {
       console.error("Error creating comment: ", error);
