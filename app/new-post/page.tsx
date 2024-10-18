@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import ApiService from "@/lib/fetch";
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth/auth";
 import {
@@ -24,6 +23,7 @@ import {
 import TiptapComponent from "@/components/tiptaps/TiptapComponent";
 import { useCurrentUserInfo } from "@/lib/current-profile";
 import { payload } from "@/store/auth/type";
+import { createPost } from "@/lib/fetchPost";
 
 const formSchema = z.object({
   title: z.string().min(3, { message: "제목은 최소 3글자가 필요해요" }),
@@ -62,11 +62,10 @@ const NewPost = () => {
     if (!token) errorToast("로그인이 필요합니다.");
 
     try {
-      const apiService = new ApiService();
-      const response = await apiService.createPost(values, token);
+      const response = await createPost(values, token);
 
       if (response.statusCode === 201) {
-        const data = await response.data;
+        const data = response.data;
         router.push(`/post/${data.id}`);
       }
     } catch (error) {

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ApiService, { PostData } from "@/lib/fetch";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { formatDistanceToNow } from "date-fns";
@@ -12,6 +11,7 @@ import CommentInputComponent from "@/components/comment/commentInput";
 import CommentListComponent from "@/components/comment/commentList";
 import PostLoading from "@/app/post/loading";
 import { NotHavePost } from "@/components/post/noHavePost";
+import { getPostById, PostData, recommendCountChange } from "@/lib/fetchPost";
 
 interface PostIdPageProps {
   params: { id: string };
@@ -25,8 +25,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const apiService = new ApiService();
-        const postResult = await apiService.getPostById(params.id);
+        const postResult = await getPostById(params.id);
         setPost(postResult.data);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -39,8 +38,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
 
   const handleLikeClick = async () => {
     setIsLiked(!isLiked);
-    const apiService = new ApiService();
-    await apiService.recommendCountChange(params.id, "up");
+    await recommendCountChange(params.id, "up");
   };
 
   if (loading) return <PostLoading />;

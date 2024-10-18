@@ -7,20 +7,18 @@ import { FaEye, FaThumbsUp } from "react-icons/fa";
 import Image from "next/image";
 import thumnail from "/public/images/default-thumnail.png";
 import { ko } from "date-fns/locale";
-import ApiService, { PostData } from "@/lib/fetch";
 import HomeLoading from "@/app/(main)/loading";
 import dayjs from "dayjs";
-
-const apiService = new ApiService();
+import { fetchPosts, PostData } from "@/lib/fetchPost";
 
 export default function HomePage() {
   const [postList, setPostList] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchPosts = async () => {
+  const fetchPostsInComponent = async () => {
     try {
       setLoading(true);
-      const result = await apiService.fetchPosts();
+      const result = await fetchPosts();
       setPostList(result.data);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
@@ -30,13 +28,13 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchPosts();
+    fetchPostsInComponent();
   }, []);
 
   // 페이지가 포커스를 받을 때마다 데이터를 새로 가져옵니다.
   useEffect(() => {
     const handleFocus = () => {
-      fetchPosts();
+      fetchPostsInComponent();
     };
 
     window.addEventListener("focus", handleFocus);
