@@ -1,8 +1,11 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+
 import {
   Form,
   FormControl,
@@ -13,18 +16,17 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import TiptapComponent from "@/components/tiptaps/TiptapComponent";
 import { useAuthStore } from "@/store/auth/auth";
 import {
   errorPostToast,
   errorToast,
 } from "@/components/errorToast/post/errorToast";
-import TiptapComponent from "@/components/tiptaps/TiptapComponent";
 import { useCurrentUserInfo } from "@/lib/current-profile";
 import { payload } from "@/store/auth/type";
 import { createPost } from "@/lib/fetchPost";
 
+// Form schema for validation
 const formSchema = z.object({
   title: z.string().min(3, { message: "제목은 최소 3글자가 필요해요" }),
   content: z.string().min(10, { message: "내용은 최소 10글자가 필요해요" }),
@@ -34,20 +36,15 @@ const formSchema = z.object({
 export type FormData = z.infer<typeof formSchema>;
 
 const NewPost = () => {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+
   const [isMounted, setIsMounted] = useState(false);
   const [content, setContent] = useState<string>("");
   const [userInfo, setUserInfo] = useState<payload | null>(null);
 
-  const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useCurrentUserInfo(setUserInfo, isAuthenticated);
-
-  const form = useForm({
+  // Setting up form control using Zod resolver
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
@@ -56,17 +53,28 @@ const NewPost = () => {
   });
   const { setValue } = form;
 
+  // Mounting hook to prevent SSR issues
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Get current user information when the component mounts
+  useCurrentUserInfo(setUserInfo, isAuthenticated);
+
+  // Handle form submission
   const onSubmit = async (values: FormData) => {
     if (userInfo) values.userId = userInfo?.userId;
+
     const token = localStorage.getItem("access-token");
-    if (!token) errorToast("로그인이 필요합니다.");
+    if (!token) {
+      return errorToast("로그인이 필요합니다.");
+    }
 
     try {
       const response = await createPost(values, token);
 
       if (response.statusCode === 201) {
-        const data = response.data;
-        router.push(`/post/${data.id}`);
+        router.push(`/post/${response.data.id}`);
       }
     } catch (error) {
       console.error("Error creating post: ", error);
@@ -74,11 +82,13 @@ const NewPost = () => {
     }
   };
 
+  // Handle content change for TiptapComponent
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
     setValue("content", newContent);
   };
 
+  // Avoid rendering on server side
   if (!isMounted) {
     return null;
   }
