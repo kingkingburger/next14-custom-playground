@@ -78,10 +78,13 @@ export async function viewCountUp(id: string): Promise<void> {
 
 export async function recommendCountChange(
   id: string,
+  userId: number,
   status: string,
 ): Promise<void> {
   try {
-    await ky.put(`${serverUrl}/post/recommendCount/id/${id}/status/${status}`);
+    await ky.put(
+      `${serverUrl}/post/recommendCount/id/${id}/userId/${userId}/status/${status}`,
+    );
   } catch (error: any) {
     console.error("Failed to change recommend count:", error.message);
     throw error;

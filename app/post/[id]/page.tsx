@@ -12,15 +12,21 @@ import CommentListComponent from "@/components/comment/commentList";
 import PostLoading from "@/app/post/loading";
 import { NotHavePost } from "@/components/post/noHavePost";
 import { getPostById, PostData, recommendCountChange } from "@/lib/fetchPost";
+import { payload } from "@/store/auth/type";
+import { useCurrentUserInfo } from "@/lib/current-profile";
+import { useAuthStore } from "@/store/auth/auth";
 
 interface PostIdPageProps {
   params: { id: string };
 }
 
 export default function PostIdPageClient({ params }: PostIdPageProps) {
+  const { isAuthenticated } = useAuthStore();
+
   const [isLiked, setIsLiked] = useState(false);
   const [post, setPost] = useState<PostData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState<payload | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -36,9 +42,17 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     fetchPost();
   }, [params.id]);
 
+  // Get current user information when the component mounts
+  useCurrentUserInfo(setUserInfo, isAuthenticated);
+
   const handleLikeClick = async () => {
     setIsLiked(!isLiked);
-    await recommendCountChange(params.id, "up");
+    if (!userInfo) {
+      console.log("로그인이 필요합니다.");
+      return;
+    }
+
+    await recommendCountChange(params.id, userInfo.userId, "up");
   };
 
   if (loading) return <PostLoading />;
