@@ -27,7 +27,7 @@ const serverUrl = process.env.NEXT_PUBLIC_SERVER || "";
 export async function fetchPosts(): Promise<PostResult<PostData[]>> {
   try {
     const data = await ky
-      .get(`${serverUrl}/post/feed`)
+      .get(`${serverUrl}/posts`)
       .json<PostResult<PostData[]>>();
     return data;
   } catch (error: any) {
@@ -42,7 +42,7 @@ export async function createPost(
 ): Promise<PostResult<PostData>> {
   try {
     const data = await ky
-      .post(`${serverUrl}/post`, {
+      .post(`${serverUrl}/posts`, {
         json: values,
         headers: { authorization: `Bearer ${token}` },
       })
@@ -57,7 +57,7 @@ export async function createPost(
 export async function getPostById(id: string): Promise<PostResult<PostData>> {
   try {
     const data = await ky
-      .get(`${serverUrl}/post/id/${id}`)
+      .get(`${serverUrl}/posts/id/${id}`)
       .json<PostResult<PostData>>();
     await viewCountUp(id);
     return data;
@@ -69,7 +69,7 @@ export async function getPostById(id: string): Promise<PostResult<PostData>> {
 
 export async function viewCountUp(id: string): Promise<void> {
   try {
-    await ky.put(`${serverUrl}/post/count/up/id/${id}`);
+    await ky.put(`${serverUrl}/posts/count/up/id/${id}`);
   } catch (error: any) {
     console.error("Failed to increment view count:", error.message);
     throw error;
@@ -83,7 +83,7 @@ export async function recommendCountChange(
 ): Promise<void> {
   try {
     await ky.put(
-      `${serverUrl}/post/recommendCount/id/${id}/userId/${userId}/status/${status}`,
+      `${serverUrl}/posts/recommendCount/id/${id}/userId/${userId}/status/${status}`,
     );
   } catch (error: any) {
     console.error("Failed to change recommend count:", error.message);
