@@ -24,7 +24,7 @@ import {
 } from "@/components/errorToast/post/errorToast";
 import { useCurrentUserInfo } from "@/lib/current-profile";
 import { payload } from "@/store/auth/type";
-import { createPost } from "@/lib/fetchPost";
+import { CreatePostData, Post, postApi } from "@/lib/fetchPost";
 
 // Form schema for validation
 const formSchema = z.object({
@@ -71,7 +71,10 @@ const NewPost = () => {
     }
 
     try {
-      const response = await createPost(values, token);
+      const response = await postApi.createPost(
+        values as CreatePostData,
+        token,
+      );
 
       if (response.statusCode === 201) {
         router.push(`/post/${response.data.id}`);
