@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import { formatDistanceToNow } from "date-fns";
@@ -11,10 +11,11 @@ import CommentInputComponent from "@/components/comment/commentInput";
 import CommentListComponent from "@/components/comment/commentList";
 import PostLoading from "@/app/post/loading";
 import { NotHavePost } from "@/components/post/noHavePost";
-import { getPostById, PostData, recommendCountChange } from "@/lib/fetchPost";
 import { payload } from "@/store/auth/type";
 import { useCurrentUserInfo } from "@/lib/current-profile";
 import { useAuthStore } from "@/store/auth/auth";
+import { Post, postApi } from "@/lib/fetchPost";
+import { errorToast } from "@/components/errorToast/post/errorToast";
 
 interface PostIdPageProps {
   params: { id: string };
@@ -24,14 +25,14 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   const { isAuthenticated } = useAuthStore();
 
   const [isLiked, setIsLiked] = useState(false);
-  const [post, setPost] = useState<PostData | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<payload | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const postResult = await getPostById(params.id);
+        const postResult = await postApi.getPostById(params.id);
         setPost(postResult.data);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -48,11 +49,11 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   const handleLikeClick = async () => {
     setIsLiked(!isLiked);
     if (!userInfo) {
-      console.log("로그인이 필요합니다.");
+      errorToast("로그인이 필요합니다.");
       return;
     }
 
-    await recommendCountChange(params.id, userInfo.userId, "up");
+    await postApi.updateRecommendation(params.id, userInfo.userId, "increase");
   };
 
   if (loading) return <PostLoading />;
