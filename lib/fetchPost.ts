@@ -70,7 +70,9 @@ class PostApiClient {
   // 게시글 목록 조회
   async getPosts(): Promise<ApiResponse<Post[]>> {
     try {
-      return await this.kyInstance.get("posts").json<ApiResponse<Post[]>>();
+      return await this.kyInstance
+        .get(POSTS_ENDPOINT)
+        .json<ApiResponse<Post[]>>();
     } catch (error) {
       console.error("게시글 목록 조회 실패:", error);
       throw error;
@@ -81,7 +83,7 @@ class PostApiClient {
   async searchPosts(searchQuery: string): Promise<ApiResponse<Post[]>> {
     try {
       return await this.kyInstance
-        .get("posts", {
+        .get(POSTS_ENDPOINT, {
           searchParams: { search: searchQuery },
         })
         .json<ApiResponse<Post[]>>();
@@ -95,7 +97,7 @@ class PostApiClient {
   async getPostById(id: string): Promise<ApiResponse<Post>> {
     try {
       const post = await this.kyInstance
-        .get(`posts/${id}`)
+        .get(`${POSTS_ENDPOINT}/${id}`)
         .json<ApiResponse<Post>>();
 
       // 조회수 증가 (비동기로 처리)
@@ -115,7 +117,7 @@ class PostApiClient {
   ): Promise<ApiResponse<Post>> {
     try {
       return await this.kyInstance
-        .post("posts", {
+        .post(POSTS_ENDPOINT, {
           json: data,
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -129,7 +131,7 @@ class PostApiClient {
   // 조회수 증가
   private async incrementViewCount(id: string): Promise<void> {
     try {
-      await this.kyInstance.put(`posts/${id}/views`);
+      await this.kyInstance.put(`${POSTS_ENDPOINT}/${id}/views`);
     } catch (error) {
       console.error("조회수 증가 실패:", error);
       throw error;
@@ -143,7 +145,7 @@ class PostApiClient {
     action: "increase" | "decrease",
   ): Promise<void> {
     try {
-      await this.kyInstance.put(`posts/${postId}/recommendations`, {
+      await this.kyInstance.put(`${POSTS_ENDPOINT}/${postId}/recommendations`, {
         searchParams: {
           userId,
           action,
