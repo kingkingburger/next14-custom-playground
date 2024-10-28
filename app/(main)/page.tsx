@@ -32,14 +32,14 @@ export default function HomePage() {
   }, []);
 
   // 페이지가 포커스를 받을 때마다 데이터를 새로 가져옵니다.
-  useEffect(() => {
-    const handleFocus = () => {
-      fetchPostsInComponent();
-    };
-
-    window.addEventListener("focus", handleFocus);
-    return () => window.removeEventListener("focus", handleFocus);
-  }, [postList]);
+  // useEffect(() => {
+  //   const handleFocus = () => {
+  //     fetchPostsInComponent();
+  //   };
+  //
+  //   window.addEventListener("focus", handleFocus);
+  //   return () => window.removeEventListener("focus", handleFocus);
+  // }, [postList]);
 
   if (loading) {
     return <HomeLoading />;

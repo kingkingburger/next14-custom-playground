@@ -35,14 +35,14 @@ export interface CreatePostData {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER || "";
-const POSTS_ENDPOINT = `${API_BASE_URL}/posts`;
+const POSTS_ENDPOINT = `${API_BASE_URL}/post`;
 
 class PostApiClient {
   private readonly kyInstance;
 
   constructor() {
     this.kyInstance = ky.create({
-      prefixUrl: API_BASE_URL,
+      // prefixUrl: API_BASE_URL,
       hooks: {
         beforeRequest: [
           (request: any) => {
@@ -70,6 +70,7 @@ class PostApiClient {
   // 게시글 목록 조회
   async getPosts(): Promise<ApiResponse<Post[]>> {
     try {
+      console.log("여기서 됨");
       return await this.kyInstance
         .get(POSTS_ENDPOINT)
         .json<ApiResponse<Post[]>>();
