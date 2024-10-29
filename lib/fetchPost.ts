@@ -35,14 +35,13 @@ export interface CreatePostData {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER || "";
-const POSTS_ENDPOINT = `${API_BASE_URL}/post`;
 
 class PostApiClient {
   private readonly kyInstance;
 
   constructor() {
     this.kyInstance = ky.create({
-      // prefixUrl: API_BASE_URL,
+      prefixUrl: `${API_BASE_URL}/post`,
       hooks: {
         beforeRequest: [
           (request: any) => {
@@ -71,9 +70,7 @@ class PostApiClient {
   async getPosts(): Promise<ApiResponse<Post[]>> {
     try {
       console.log("여기서 됨");
-      return await this.kyInstance
-        .get(POSTS_ENDPOINT)
-        .json<ApiResponse<Post[]>>();
+      return await this.kyInstance.get("").json<ApiResponse<Post[]>>();
     } catch (error) {
       console.error("게시글 목록 조회 실패:", error);
       throw error;
@@ -84,7 +81,7 @@ class PostApiClient {
   async searchPosts(searchQuery: string): Promise<ApiResponse<Post[]>> {
     try {
       return await this.kyInstance
-        .get(POSTS_ENDPOINT, {
+        .get("", {
           searchParams: { search: searchQuery },
         })
         .json<ApiResponse<Post[]>>();
@@ -97,9 +94,7 @@ class PostApiClient {
   // 게시글 상세 조회
   async getPostById(id: string): Promise<ApiResponse<Post>> {
     try {
-      const post = await this.kyInstance
-        .get(`${POSTS_ENDPOINT}/${id}`)
-        .json<ApiResponse<Post>>();
+      const post = await this.kyInstance.get(id).json<ApiResponse<Post>>();
 
       // 조회수 증가 (비동기로 처리)
       this.incrementViewCount(id).catch(console.error);
@@ -118,7 +113,7 @@ class PostApiClient {
   ): Promise<ApiResponse<Post>> {
     try {
       return await this.kyInstance
-        .post(POSTS_ENDPOINT, {
+        .post("", {
           json: data,
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -132,7 +127,7 @@ class PostApiClient {
   // 조회수 증가
   private async incrementViewCount(id: string): Promise<void> {
     try {
-      await this.kyInstance.put(`${POSTS_ENDPOINT}/${id}/views`);
+      await this.kyInstance.put(`${id}/views`);
     } catch (error) {
       console.error("조회수 증가 실패:", error);
       throw error;
@@ -146,7 +141,7 @@ class PostApiClient {
     action: "increase" | "decrease",
   ): Promise<void> {
     try {
-      await this.kyInstance.put(`${POSTS_ENDPOINT}/${postId}/recommendations`, {
+      await this.kyInstance.put(`${postId}/recommendations`, {
         searchParams: {
           userId,
           action,
