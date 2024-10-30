@@ -113,7 +113,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">등록</Button>
         </form>
       </Form>
     </div>
