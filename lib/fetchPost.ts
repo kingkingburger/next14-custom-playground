@@ -94,12 +94,7 @@ class PostApiClient {
   // 게시글 상세 조회
   async getPostById(id: string): Promise<ApiResponse<Post>> {
     try {
-      const post = await this.kyInstance.get(id).json<ApiResponse<Post>>();
-
-      // 조회수 증가 (비동기로 처리)
-      this.incrementViewCount(id).catch(console.error);
-
-      return post;
+      return await this.kyInstance.get(id).json<ApiResponse<Post>>();
     } catch (error) {
       console.error("게시글 상세 조회 실패:", error);
       throw error;
@@ -125,7 +120,7 @@ class PostApiClient {
   }
 
   // 조회수 증가
-  private async incrementViewCount(id: string): Promise<void> {
+  async incrementViewCount(id: string): Promise<void> {
     try {
       await this.kyInstance.put(`${id}/views`);
     } catch (error) {

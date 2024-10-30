@@ -33,6 +33,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     const fetchPost = async () => {
       try {
         const postResult = await postApi.getPostById(params.id);
+        await postApi.incrementViewCount(params.id);
         setPost(postResult.data);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -47,13 +48,17 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const handleLikeClick = async () => {
-    setIsLiked(!isLiked);
     if (!userInfo) {
       errorToast("로그인이 필요합니다.");
       return;
     }
-
     await postApi.updateRecommendation(params.id, userInfo.userId, "increase");
+    const postResult = await postApi.getPostById(params.id);
+    setPost(postResult.data);
+
+    if (postResult.data) {
+      setIsLiked(!isLiked);
+    }
   };
 
   if (loading) return <PostLoading />;
