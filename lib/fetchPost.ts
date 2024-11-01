@@ -153,12 +153,12 @@ class PostApiClient {
   }
 
   // 게시글 추천 확인
-  async checkRecommendation(postId: string, userId: number): Promise<void> {
+  async checkRecommendation(postId: string, userId: number): Promise<boolean> {
     try {
-      const checkResult = await this.kyInstance.get<boolean>(
-        `check/recommendation/userId/${userId}/postId/${postId}`,
-      );
-      console.log("checkResult = ", checkResult);
+      const checkResult = await this.kyInstance
+        .get<boolean>(`check/recommendation/userId/${userId}/postId/${postId}`)
+        .json();
+      return checkResult.data;
     } catch (error: unknown) {
       console.error("게시글 추천 상태 확인 api 실패:", error);
       throw error;

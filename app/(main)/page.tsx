@@ -10,8 +10,11 @@ import { ko } from "date-fns/locale";
 import HomeLoading from "@/app/(main)/loading";
 import dayjs from "dayjs";
 import { Post, postApi } from "@/lib/fetchPost";
+import { useUserStore } from "@/store/user/userStore";
 
 export default function HomePage() {
+  const { getUser } = useUserStore();
+
   const [postList, setPostList] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,19 +30,18 @@ export default function HomePage() {
     }
   };
 
+  const fetchUserInfo = async () => {
+    try {
+      await getUser();
+    } catch (error) {
+      console.error("Failed to get userInfo:", error);
+    }
+  };
+
   useEffect(() => {
     fetchPostsInComponent();
+    fetchUserInfo();
   }, []);
-
-  // 페이지가 포커스를 받을 때마다 데이터를 새로 가져옵니다.
-  // useEffect(() => {
-  //   const handleFocus = () => {
-  //     fetchPostsInComponent();
-  //   };
-  //
-  //   window.addEventListener("focus", handleFocus);
-  //   return () => window.removeEventListener("focus", handleFocus);
-  // }, [postList]);
 
   if (loading) {
     return <HomeLoading />;

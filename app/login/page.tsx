@@ -40,7 +40,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      void getUser();
       router.push("/");
     }
   }, [isAuthenticated]);

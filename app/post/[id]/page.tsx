@@ -43,8 +43,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
           postId,
           userId,
         );
-        console.log("checkRecommend = ", checkRecommend);
-        // setIsLiked(checkRecommend);
+        setIsLiked(checkRecommend);
       } catch (error) {
         console.error("Error fetching post:", error);
       } finally {
@@ -64,7 +63,6 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
       userInfo.userId,
       "increase",
     );
-    console.log("updateRecommendationResult = ", updateRecommendationResult);
     const postResult = await postApi.getPostById(params.id);
     setPost(postResult.data);
 
