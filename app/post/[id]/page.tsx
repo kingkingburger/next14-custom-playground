@@ -29,12 +29,25 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<payload | null>(null);
 
+  // 유저정보 가져오기
+  useCurrentUserInfo(setUserInfo, isAuthenticated);
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const postResult = await postApi.getPostById(params.id);
         await postApi.incrementViewCount(params.id);
         setPost(postResult.data);
+        console.log("userInfo = ", userInfo);
+        if (!userInfo) {
+          return;
+        }
+
+        const checkRecommend = await postApi.checkRecommendation(
+          params.id,
+          userInfo?.userId,
+        );
+        // setIsLiked(checkRecommend);
       } catch (error) {
         console.error("Error fetching post:", error);
       } finally {
@@ -44,15 +57,17 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
     fetchPost();
   }, [params.id]);
 
-  // Get current user information when the component mounts
-  useCurrentUserInfo(setUserInfo, isAuthenticated);
-
   const handleLikeClick = async () => {
     if (!userInfo) {
       errorToast("로그인이 필요합니다.");
       return;
     }
-    await postApi.updateRecommendation(params.id, userInfo.userId, "increase");
+    const updateRecommendationResult = await postApi.updateRecommendation(
+      params.id,
+      userInfo.userId,
+      "increase",
+    );
+    console.log("updateRecommendationResult = ", updateRecommendationResult);
     const postResult = await postApi.getPostById(params.id);
     setPost(postResult.data);
 

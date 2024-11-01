@@ -4,6 +4,9 @@ export interface ApiResponseResult<T> {
   statusCode: number;
   timestamp: Date;
   data: T;
+  path?: string;
+  method?: string;
+  customMessage?: string;
 }
 
 export interface tokenType {

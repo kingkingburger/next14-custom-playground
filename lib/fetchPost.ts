@@ -1,4 +1,5 @@
 import ky from "@toss/ky";
+import { ApiResponseResult } from "@/lib/response.type";
 
 // Types
 export interface ApiResponse<T> {
@@ -69,7 +70,6 @@ class PostApiClient {
   // 게시글 목록 조회
   async getPosts(): Promise<ApiResponse<Post[]>> {
     try {
-      console.log("여기서 됨");
       return await this.kyInstance.get("").json<ApiResponse<Post[]>>();
     } catch (error) {
       console.error("게시글 목록 조회 실패:", error);
@@ -136,13 +136,29 @@ class PostApiClient {
     action: "increase" | "decrease",
   ): Promise<void> {
     try {
-      await this.kyInstance.put(`${postId}/recommendations`, {
-        searchParams: {
-          userId,
-          action,
+      const updateResult = await this.kyInstance.put(
+        `${postId}/recommendations`,
+        {
+          searchParams: {
+            userId,
+            action,
+          },
         },
-      });
-    } catch (error) {
+      );
+    } catch (error: unknown) {
+      console.error("게시글 추천 상태 변경 실패:", error);
+      throw error;
+    }
+  }
+
+  // 게시글 추천 확인
+  async checkRecommendation(postId: string, userId: number): Promise<void> {
+    try {
+      const checkResult = await this.kyInstance.get<boolean>(
+        `/check/recommendation/userId/${userId}/postId/${postId}`,
+      );
+      console.log("checkResult = ", checkResult);
+    } catch (error: unknown) {
       console.error("게시글 추천 상태 변경 실패:", error);
       throw error;
     }
