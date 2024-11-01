@@ -50,6 +50,7 @@ class PostApiClient {
             if (token) {
               request.headers.set("Authorization", `Bearer ${token}`);
             }
+            console.log("request.prefixUrl = ", request.url);
           },
         ],
         beforeError: [
@@ -155,11 +156,11 @@ class PostApiClient {
   async checkRecommendation(postId: string, userId: number): Promise<void> {
     try {
       const checkResult = await this.kyInstance.get<boolean>(
-        `/check/recommendation/userId/${userId}/postId/${postId}`,
+        `check/recommendation/userId/${userId}/postId/${postId}`,
       );
       console.log("checkResult = ", checkResult);
     } catch (error: unknown) {
-      console.error("게시글 추천 상태 변경 실패:", error);
+      console.error("게시글 추천 상태 확인 api 실패:", error);
       throw error;
     }
   }

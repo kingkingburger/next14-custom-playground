@@ -1,3 +1,9 @@
+/**
+ * [24/11/11]
+ * lib/fetchPost의 api로 사용하고 있음
+ * store를 사용하게 된다면 예시파일로 남겨둔거임
+ */
+
 import { create } from "zustand";
 
 interface PostType {

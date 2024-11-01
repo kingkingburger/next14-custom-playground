@@ -16,6 +16,7 @@ import { useCurrentUserInfo } from "@/lib/current-profile";
 import { useAuthStore } from "@/store/auth/auth";
 import { Post, postApi } from "@/lib/fetchPost";
 import { errorToast } from "@/components/errorToast/post/errorToast";
+import { useUserStore } from "@/store/user/userStore";
 
 interface PostIdPageProps {
   params: { id: string };
@@ -23,30 +24,26 @@ interface PostIdPageProps {
 
 export default function PostIdPageClient({ params }: PostIdPageProps) {
   const { isAuthenticated } = useAuthStore();
-
+  const { id: userId } = useUserStore();
   const [isLiked, setIsLiked] = useState(false);
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<payload | null>(null);
-
   // 유저정보 가져오기
   useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const postResult = await postApi.getPostById(params.id);
-        await postApi.incrementViewCount(params.id);
+        const postId = params.id;
+        const postResult = await postApi.getPostById(postId);
+        await postApi.incrementViewCount(postId);
         setPost(postResult.data);
-        console.log("userInfo = ", userInfo);
-        if (!userInfo) {
-          return;
-        }
-
         const checkRecommend = await postApi.checkRecommendation(
-          params.id,
-          userInfo?.userId,
+          postId,
+          userId,
         );
+        console.log("checkRecommend = ", checkRecommend);
         // setIsLiked(checkRecommend);
       } catch (error) {
         console.error("Error fetching post:", error);

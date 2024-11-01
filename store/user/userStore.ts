@@ -1,11 +1,12 @@
-/**
- * auth에 있는 정보를 여기다 넣는 방법 생각해뵈기
- */
 import { create } from "zustand";
-import { UserData } from "@/store/user/userType";
-import axios from "axios";
+import { UserAction, UserData } from "@/store/user/userType";
+import { payload } from "@/store/auth/type";
+import { getProfile, isTokenExpired } from "@/lib/current-profile";
+import ky from "@toss/ky";
+import { API_BASE_URL } from "@/lib/constant";
+import { ApiResponseResult } from "@/lib/response.type";
 
-const initial: UserData = {
+export const useUserStore = create<UserData & UserAction>((set) => ({
   id: 0,
   email: "",
   password: "",
@@ -13,21 +14,17 @@ const initial: UserData = {
   profilePicture: "",
   createdAt: "",
   updatedAt: "",
-};
-export const useUserStore = create<UserData>((set) => ({
-  ...initial,
 
-  getUser: async (token: string) => {
+  getUser: async () => {
     try {
-      const token = localStorage.getItem("access-token");
-      const result = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}/auth/profile`,
-        {
-          headers: { authorization: `Bearer ${token}` },
-        },
-      );
-      if (result.data) {
-        set({ id: result.data.id });
+      const token = localStorage?.getItem("access-token");
+
+      if (token && !isTokenExpired(token)) {
+        const profile = getProfile() as payload;
+        const userInfo = await ky
+          .get(`${API_BASE_URL}/user/id/${profile.userId}`)
+          .json<ApiResponseResult<UserData>>();
+        set(userInfo.data);
       }
     } catch (e) {
     } finally {
