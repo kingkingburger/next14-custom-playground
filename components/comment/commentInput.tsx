@@ -23,6 +23,7 @@ import {
 } from "@/components/errorToast/post/errorToast";
 import { payload } from "@/store/auth/type";
 import { useCurrentUserInfo } from "@/lib/current-profile";
+import { useUserStore } from "@/store/user/userStore";
 
 const formSchema = z.object({
   content: z.string().optional(),
@@ -41,7 +42,7 @@ interface CommentComponentProps {
 export const CommentInputComponent = ({ params }: CommentComponentProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [userInfo, setUserInfo] = useState<payload | null>(null);
-
+  const { id: userId } = useUserStore();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
   const { createComment, getComments } = useCommentStore();
@@ -74,9 +75,9 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
 
     // 댓글 작성
     try {
-      if (userInfo) values.userId = userInfo.userId;
+      if (userId) values.userId = userId;
       values.postId = parseInt(params.id, 10);
-      values.userId = userInfo?.userId;
+      values.userId = userId;
 
       await createComment(values, token);
       await getComments(values.postId);
