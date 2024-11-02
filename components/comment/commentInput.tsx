@@ -41,7 +41,7 @@ interface CommentComponentProps {
 
 export const CommentInputComponent = ({ params }: CommentComponentProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [userInfo, setUserInfo] = useState<payload | null>(null);
+  // const [userInfo, setUserInfo] = useState<payload | null>(null);
   const { id: userId } = useUserStore();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
@@ -51,7 +51,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
     setIsMounted(true);
   }, []);
 
-  useCurrentUserInfo(setUserInfo, isAuthenticated);
+  // useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
