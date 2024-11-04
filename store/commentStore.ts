@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "axios";
+import ky from "@toss/ky";
 
 export interface Comment {
   id: number;
@@ -19,7 +19,7 @@ interface CommentStore {
   isLoading: boolean;
   error: string | null;
   getComments: (postId: number) => Promise<void>;
-  createComment: (comment: Partial<Comment>, token: string) => Promise<void>;
+  createComment: (comment: Partial<Comment>) => Promise<void>;
   createReply: (
     reply: Partial<Comment>,
     parentId: number,
@@ -27,6 +27,30 @@ interface CommentStore {
   ) => Promise<void>;
   deleteComment: (commentId: number, token: string) => Promise<void>;
 }
+
+const api = ky.create({
+  prefixUrl: `${process.env.NEXT_PUBLIC_SERVER}/comment`,
+  hooks: {
+    beforeRequest: [
+      (request: any) => {
+        const token = localStorage.getItem("access-token");
+        if (token) {
+          request.headers.set("Authorization", `Bearer ${token}`);
+        }
+      },
+    ],
+    beforeError: [
+      async (error: any) => {
+        const { response } = error;
+        if (response) {
+          const data = await response.json();
+          error.message = data.message || "요청 처리 중 오류가 발생했습니다.";
+        }
+        return error;
+      },
+    ],
+  },
+});
 
 const useCommentStore = create<CommentStore>((set) => ({
   commentList: [],
@@ -36,25 +60,18 @@ const useCommentStore = create<CommentStore>((set) => ({
   getComments: async (postId: number) => {
     set({ isLoading: true });
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}/comment/postId/${postId}`,
-      );
-      const comments = response.data;
-      set({ commentList: comments.data, isLoading: false });
+      const response = await api
+        .get(`postId/${postId}`)
+        .json<{ data: Comment[] }>();
+      set({ commentList: response.data, isLoading: false });
     } catch (error) {
       set({ error: "댓글을 불러오는 데 실패했습니다.", isLoading: false });
     }
   },
 
-  createComment: async (comment: Partial<Comment>, token: string) => {
+  createComment: async (comment: Partial<Comment>) => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}/comment`,
-        comment,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      await api.post("", { json: comment });
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });
@@ -67,14 +84,13 @@ const useCommentStore = create<CommentStore>((set) => ({
     token: string,
   ) => {
     try {
-      const response = await axios.post(
-        "/api/comments",
-        { ...reply, parentId },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      const newReply = response.data;
+      const newReply = await api
+        .create({
+          headers: { Authorization: token },
+        })
+        .post("api/comments", { json: { ...reply, parentId } })
+        .json<Comment>();
+
       set((state) => {
         const updateReplies = (comments: Comment[]): Comment[] => {
           return comments.map((comment) => {
@@ -102,12 +118,11 @@ const useCommentStore = create<CommentStore>((set) => ({
 
   deleteComment: async (commentId: number, token: string) => {
     try {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_SERVER}/comment/id/${commentId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      await api
+        .create({
+          headers: { Authorization: token },
+        })
+        .delete(`id/${commentId}`);
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });

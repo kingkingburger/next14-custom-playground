@@ -21,8 +21,6 @@ import {
   errorPostToast,
   errorToast,
 } from "@/components/errorToast/post/errorToast";
-import { payload } from "@/store/auth/type";
-import { useCurrentUserInfo } from "@/lib/current-profile";
 import { useUserStore } from "@/store/user/userStore";
 
 const formSchema = z.object({
@@ -41,7 +39,6 @@ interface CommentComponentProps {
 
 export const CommentInputComponent = ({ params }: CommentComponentProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  // const [userInfo, setUserInfo] = useState<payload | null>(null);
   const { id: userId } = useUserStore();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
@@ -51,8 +48,6 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
     setIsMounted(true);
   }, []);
 
-  // useCurrentUserInfo(setUserInfo, isAuthenticated);
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,15 +56,11 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
   });
 
   const onSubmit = async (values: CommentFormData) => {
-    const token = localStorage.getItem("access-token");
-
     // 로그인 상태 확인
-    if (!token) {
+    if (!userId) {
       errorToast("로그인이 필요합니다.");
-
       // 필요 시 로그인 페이지로 리다이렉트
       router.push("/login"); // 로그인 페이지로 이동
-
       return;
     }
 
@@ -79,7 +70,7 @@ export const CommentInputComponent = ({ params }: CommentComponentProps) => {
       values.postId = parseInt(params.id, 10);
       values.userId = userId;
 
-      await createComment(values, token);
+      await createComment(values);
       await getComments(values.postId);
       router.refresh(); // 댓글 작성 후 페이지를 새로고침하여 변경사항 반영
     } catch (error) {
