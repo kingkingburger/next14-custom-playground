@@ -50,7 +50,6 @@ class PostApiClient {
             if (token) {
               request.headers.set("Authorization", `Bearer ${token}`);
             }
-            console.log("request.prefixUrl = ", request.url);
           },
         ],
         beforeError: [
