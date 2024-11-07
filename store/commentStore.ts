@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import ky from "@toss/ky";
+import { globalApi } from "@/lib/api.main";
 
 export interface Comment {
   id: number;
@@ -60,8 +61,8 @@ const useCommentStore = create<CommentStore>((set) => ({
   getComments: async (postId: number) => {
     set({ isLoading: true });
     try {
-      const response = await api
-        .get(`postId/${postId}`)
+      const response = await globalApi
+        .get(`/comment/postId/${postId}`)
         .json<{ data: Comment[] }>();
       set({ commentList: response.data, isLoading: false });
     } catch (error) {
@@ -71,7 +72,7 @@ const useCommentStore = create<CommentStore>((set) => ({
 
   createComment: async (comment: Partial<Comment>) => {
     try {
-      await api.post("", { json: comment });
+      await globalApi.post("/comment", { json: comment });
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });
@@ -118,11 +119,11 @@ const useCommentStore = create<CommentStore>((set) => ({
 
   deleteComment: async (commentId: number, token: string) => {
     try {
-      await api
+      await globalApi
         .create({
           headers: { Authorization: token },
         })
-        .delete(`id/${commentId}`);
+        .delete(`/commentid/${commentId}`);
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });

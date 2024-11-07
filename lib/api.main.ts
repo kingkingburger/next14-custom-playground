@@ -1,6 +1,6 @@
 import ky from "@toss/ky";
 
-const api = ky.create({
+export const globalApi = ky.create({
   prefixUrl: `${process.env.NEXT_PUBLIC_SERVER}/comment`,
   hooks: {
     beforeRequest: [
