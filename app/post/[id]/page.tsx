@@ -39,6 +39,10 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
         const postResult = await postApi.getPostById(postId);
         await postApi.incrementViewCount(postId);
         setPost(postResult.data);
+        // user 정보 없다면 recommend 나오지 않게 설정
+        if (!userId) {
+          return;
+        }
         const checkRecommend = await postApi.checkRecommendation(
           postId,
           userId,
@@ -58,6 +62,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
       errorToast("로그인이 필요합니다.");
       return;
     }
+
     const updateRecommendationResult = await postApi.updateRecommendation(
       params.id,
       userInfo.userId,

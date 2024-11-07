@@ -85,11 +85,11 @@ const useCommentStore = create<CommentStore>((set) => ({
     token: string,
   ) => {
     try {
-      const newReply = await api
+      const newReply = await globalApi
         .create({
           headers: { Authorization: token },
         })
-        .post("api/comments", { json: { ...reply, parentId } })
+        .post("/comments", { json: { ...reply, parentId } })
         .json<Comment>();
 
       set((state) => {
