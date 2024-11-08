@@ -25,6 +25,7 @@ interface PostIdPageProps {
 export default function PostIdPageClient({ params }: PostIdPageProps) {
   const { isAuthenticated } = useAuthStore();
   const { id: userId } = useUserStore();
+
   const [isLiked, setIsLiked] = useState(false);
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
@@ -63,11 +64,7 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
       return;
     }
 
-    const updateRecommendationResult = await postApi.updateRecommendation(
-      params.id,
-      userInfo.userId,
-      "increase",
-    );
+    await postApi.updateRecommendation(params.id, userInfo.userId, "increase");
     const postResult = await postApi.getPostById(params.id);
     setPost(postResult.data);
 
