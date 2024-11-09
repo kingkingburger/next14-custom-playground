@@ -29,9 +29,9 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState<payload | null>(null);
+  // const [userInfo, setUserInfo] = useState<payload | null>(null);
   // 유저정보 가져오기
-  useCurrentUserInfo(setUserInfo, isAuthenticated);
+  // useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -59,12 +59,12 @@ export default function PostIdPageClient({ params }: PostIdPageProps) {
   }, [params.id]);
 
   const handleLikeClick = async () => {
-    if (!userInfo) {
+    if (!userId) {
       errorToast("로그인이 필요합니다.");
       return;
     }
 
-    await postApi.updateRecommendation(params.id, userInfo.userId, "increase");
+    await postApi.updateRecommendation(params.id, userId, "increase");
     const postResult = await postApi.getPostById(params.id);
     setPost(postResult.data);
 
