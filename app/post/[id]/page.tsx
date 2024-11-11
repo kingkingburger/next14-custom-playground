@@ -23,15 +23,11 @@ interface PostIdPageProps {
 }
 
 export default function PostIdPageClient({ params }: PostIdPageProps) {
-  const { isAuthenticated } = useAuthStore();
   const { id: userId } = useUserStore();
 
   const [isLiked, setIsLiked] = useState(false);
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  // const [userInfo, setUserInfo] = useState<payload | null>(null);
-  // 유저정보 가져오기
-  // useCurrentUserInfo(setUserInfo, isAuthenticated);
 
   useEffect(() => {
     const fetchPost = async () => {
