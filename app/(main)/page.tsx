@@ -21,7 +21,6 @@ export default function HomePage() {
   const limit = 10; // 페이지당 게시물 수
 
   const fetchPostsInComponent = async (pageNumber = 1) => {
-    console.log("pageNumber = ", pageNumber);
     try {
       setLoading(true);
       const result = await postApi.getPosts(pageNumber, limit);
