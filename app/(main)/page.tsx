@@ -11,20 +11,23 @@ import HomeLoading from "@/app/(main)/loading";
 import dayjs from "dayjs";
 import { Post, postApi } from "@/lib/fetchPost";
 import { useUserStore } from "@/store/user/userStore";
+import Pagination from "@/components/paging/pagination";
 
 export default function HomePage() {
   const { getUser } = useUserStore();
 
   const [postList, setPostList] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1); // 현재 페이지
-  const limit = 10; // 페이지당 게시물 수
+  const [page, setPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0); // 전체 게시물 수 추가
+  const limit = 10;
 
-  const fetchPostsInComponent = async (pageNumber = 1) => {
+  const fetchPosts = async (pageNumber = 1) => {
     try {
       setLoading(true);
       const result = await postApi.getPosts(pageNumber, limit);
-      setPostList(result.data);
+      setPostList(result.data.data);
+      setTotalPosts(result.data.total); // 전체 게시물 수 설정
     } catch (error) {
       console.error("Failed to fetch posts:", error);
     } finally {
@@ -41,9 +44,13 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchPostsInComponent(page); // 현재 페이지에 대한 게시물 목록 요청
+    fetchPosts(page);
     fetchUserInfo();
   }, [page]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   if (loading) {
     return <HomeLoading />;
@@ -97,23 +104,13 @@ export default function HomePage() {
             </Link>
           ))}
         </main>
-        {/* 페이지네이션 버튼 */}
-        <div className="flex justify-center space-x-2 mt-4">
-          <button
-            className="px-4 py-2 bg-gray-700 text-white rounded"
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            disabled={page === 1}
-          >
-            이전
-          </button>
-          <span className="text-white">{page}</span>
-          <button
-            className="px-4 py-2 bg-gray-700 text-white rounded"
-            onClick={() => setPage((prev) => prev + 1)}
-          >
-            다음
-          </button>
-        </div>
+        {/* 페이지네이션 컴포넌트 사용 */}
+        <Pagination
+          totalItems={totalPosts}
+          itemsPerPage={limit}
+          currentPage={page}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

@@ -4,7 +4,10 @@ import ky from "@toss/ky";
 export interface ApiResponse<T> {
   statusCode: number;
   timestamp: Date;
-  data: T;
+  data: {
+    data: T;
+    total: number;
+  };
 }
 
 export interface Post {
