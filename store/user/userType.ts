@@ -9,5 +9,5 @@ export interface UserData {
 }
 
 export interface UserAction {
-  getUser: (accessToken: string) => Promise<void>;
+  getUser: () => Promise<void>;
 }
