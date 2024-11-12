@@ -1,5 +1,4 @@
 import ky from "@toss/ky";
-import { ApiResponseResult } from "@/lib/response.type";
 
 // Types
 export interface ApiResponse<T> {
@@ -68,9 +67,19 @@ class PostApiClient {
   }
 
   // 게시글 목록 조회
-  async getPosts(): Promise<ApiResponse<Post[]>> {
+  async getPosts(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<ApiResponse<Post[]>> {
     try {
-      return await this.kyInstance.get("").json<ApiResponse<Post[]>>();
+      // 쿼리 파라미터로 page와 limit을 전달
+      const queryParams = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      });
+      return await this.kyInstance
+        .get(`?${queryParams}`)
+        .json<ApiResponse<Post[]>>();
     } catch (error) {
       console.error("게시글 목록 조회 실패:", error);
       throw error;
