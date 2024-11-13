@@ -24,7 +24,8 @@ export default function HomePage() {
     try {
       setLoading(true);
       const result = await postApi.getPosts(pageNumber, limit);
-      setPostList(result.data);
+      console.log("result = ", result);
+      setPostList(result.data.data);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
     } finally {
