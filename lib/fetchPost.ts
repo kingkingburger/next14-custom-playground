@@ -4,6 +4,12 @@ import ky from "@toss/ky";
 export interface ApiResponse<T> {
   statusCode: number;
   timestamp: Date;
+  data: T;
+}
+
+export interface ListApiResponse<T> {
+  statusCode: number;
+  timestamp: Date;
   data: {
     data: T;
     total: number;
@@ -73,7 +79,7 @@ class PostApiClient {
   async getPosts(
     page: number = 1,
     limit: number = 10,
-  ): Promise<ApiResponse<Post[]>> {
+  ): Promise<ListApiResponse<Post[]>> {
     try {
       // 쿼리 파라미터로 page와 limit을 전달
       const queryParams = new URLSearchParams({
@@ -82,7 +88,7 @@ class PostApiClient {
       });
       return await this.kyInstance
         .get(`?${queryParams}`)
-        .json<ApiResponse<Post[]>>();
+        .json<ListApiResponse<Post[]>>();
     } catch (error) {
       console.error("게시글 목록 조회 실패:", error);
       throw error;
