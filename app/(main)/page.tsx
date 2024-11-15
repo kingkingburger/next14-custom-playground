@@ -18,14 +18,15 @@ export default function HomePage() {
   const [postList, setPostList] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1); // 현재 페이지
+  const [totalPage, setTotalPage] = useState(1); // 현재 페이지
   const limit = 10; // 페이지당 게시물 수
 
   const fetchPostsInComponent = async (pageNumber = 1) => {
     try {
       setLoading(true);
-      const result = await postApi.getPosts(pageNumber, limit);
-      console.log("result = ", result);
+      const result = await postApi.getPostList(pageNumber, limit);
       setPostList(result.data.data);
+      setTotalPage(result.data.total);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
     } finally {
@@ -107,7 +108,9 @@ export default function HomePage() {
           >
             이전
           </button>
-          <span className="text-white">{page}</span>
+          <span className="text-white">
+            {page} / {Math.ceil(totalPage / limit)}
+          </span>
           <button
             className="px-4 py-2 bg-gray-700 text-white rounded"
             onClick={() => setPage((prev) => prev + 1)}

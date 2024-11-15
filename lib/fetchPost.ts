@@ -76,7 +76,7 @@ class PostApiClient {
   }
 
   // 게시글 목록 조회
-  async getPosts(
+  async getPostList(
     page: number = 1,
     limit: number = 10,
   ): Promise<ListApiResponse<Post[]>> {
