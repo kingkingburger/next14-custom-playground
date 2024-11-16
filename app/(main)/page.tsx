@@ -11,6 +11,7 @@ import HomeLoading from "@/app/(main)/loading";
 import dayjs from "dayjs";
 import { Post, postApi } from "@/lib/fetchPost";
 import { useUserStore } from "@/store/user/userStore";
+import CustomPagination from "@/components/paging/customPagination";
 
 export default function HomePage() {
   const { getUser } = useUserStore();
@@ -99,24 +100,14 @@ export default function HomePage() {
             </Link>
           ))}
         </main>
-        {/* 페이지네이션 버튼 */}
-        <div className="flex justify-center space-x-2 mt-4">
-          <button
-            className="px-4 py-2 bg-gray-700 text-white rounded"
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            disabled={page === 1}
-          >
-            이전
-          </button>
-          <span className="text-white">
-            {page} / {Math.ceil(totalPage / limit)}
-          </span>
-          <button
-            className="px-4 py-2 bg-gray-700 text-white rounded"
-            onClick={() => setPage((prev) => prev + 1)}
-          >
-            다음
-          </button>
+        {/* 페이지네이션 */}
+        <div className="flex justify-center mt-4">
+          <CustomPagination
+            currentPage={page}
+            totalItems={totalPage}
+            itemsPerPage={limit}
+            onPageChange={setPage}
+          />
         </div>
       </div>
     </div>
