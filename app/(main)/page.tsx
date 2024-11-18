@@ -20,7 +20,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1); // 현재 페이지
   const [totalPage, setTotalPage] = useState(1); // 현재 페이지
-  const limit = 10; // 페이지당 게시물 수
+  const limit = 7; // 페이지당 게시물 수
 
   const fetchPostsInComponent = async (pageNumber = 1) => {
     try {
