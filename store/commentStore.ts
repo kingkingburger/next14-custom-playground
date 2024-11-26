@@ -38,17 +38,18 @@ const useCommentStore = create<CommentStore>((set) => ({
     set({ isLoading: true });
     try {
       const response = await globalApi
-        .get(`/comment/postId/${postId}`)
+        .get(`comment/postId/${postId}`)
         .json<{ data: Comment[] }>();
       set({ commentList: response.data, isLoading: false });
     } catch (error) {
+      console.log(error);
       set({ error: "댓글을 불러오는 데 실패했습니다.", isLoading: false });
     }
   },
 
   createComment: async (comment: Partial<Comment>) => {
     try {
-      await globalApi.post("/comment", { json: comment });
+      await globalApi.post("comment", { json: comment });
     } catch (error) {
       console.log("error = ", error);
       set({ error: "댓글 작성에 실패했습니다." });
@@ -65,7 +66,7 @@ const useCommentStore = create<CommentStore>((set) => ({
         .create({
           headers: { Authorization: token },
         })
-        .post("/comments", { json: { ...reply, parentId } })
+        .post("comments", { json: { ...reply, parentId } })
         .json<Comment>();
 
       set((state) => {
@@ -95,14 +96,9 @@ const useCommentStore = create<CommentStore>((set) => ({
 
   deleteComment: async (commentId: number, token: string) => {
     try {
-      await globalApi
-        .create({
-          headers: { Authorization: token },
-        })
-        .delete(`/commentid/${commentId}`);
+      await globalApi.delete(`comment/id/${commentId}`);
     } catch (error) {
-      console.log("error = ", error);
-      set({ error: "댓글 작성에 실패했습니다." });
+      set({ error: "댓글 삭제에 실패했습니다." });
     }
   },
 }));

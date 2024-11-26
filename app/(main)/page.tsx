@@ -9,6 +9,7 @@ import thumnail from "/public/images/default-thumnail.png";
 import { ko } from "date-fns/locale";
 import HomeLoading from "@/app/(main)/loading";
 import dayjs from "dayjs";
+
 import { Post, postApi } from "@/lib/fetchPost";
 import { useUserStore } from "@/store/user/userStore";
 import CustomPagination from "@/components/paging/customPagination";

@@ -1,53 +1,35 @@
-
 {
-  "parser": "@typescript-eslint/parser", // TypeScript 파서를 사용
-  "plugins": [
-    "@typescript-eslint", // TypeScript 플러그인을 사용
-    "import" // import 플러그인을 사용
+  "extends": "next/core-web-vitals",
+  "import/newline-after-import": [
+    "error",
+    {
+      "count": 1
+    }
   ],
-  "extends": [
-    "plugin:@typescript-eslint/recommended", // TypeScript 권장 설정을 사용
-    "prettier", // 이 줄을 추가하여 eslint-config-prettier를 활성화
-    "plugin:prettier/recommended", // 이 줄을 추가하여 eslint-plugin-prettier와 함께 사용
-    "next/core-web-vitals"
-  ],
-  "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-explicit-any": "warn",
-    "no-console": "warn",
-    "indent": ["error", 2, { "SwitchCase": 1 }],
-    "no-multi-spaces": "error",
-    "eqeqeq": ["error", "always"],
-    "object-curly-newline": [
-      "error", // 객체 리터럴의 중괄호에 개행을 강제
-      { "ObjectExpression": { "multiline": true } }
-    ],
-    "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }], // 객체 속성 개행을 강제하지만, 모든 속성이 같은 줄에 있을 수 있음
-    "no-trailing-spaces": "error",
-    "max-len": ["error", { "code": 120 }],
-    "no-multiple-empty-lines": ["error", { "max": 1 }],
-    "curly": ["error", "all"],
-    "import/newline-after-import": ["error", { "count": 1 }],
-    "import/order": [
-      "error",
-      {
-        "groups": ["builtin", "external", "internal"],
-        "pathGroups": [
-          {
-            "pattern": "./*",
-            "group": "internal",
-            "position": "after"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": ["builtin"],
-        "newlines-between": "always-and-inside-groups",
-        "alphabetize": {
-          "order": "asc", // "asc" 또는 "desc"
-          "caseInsensitive": true
+  "import/order": [
+    "error",
+    {
+      "groups": [
+        "builtin",
+        "external",
+        "internal"
+      ],
+      "pathGroups": [
+        {
+          "pattern": "./*",
+          "group": "internal",
+          "position": "after"
         }
+      ],
+      "pathGroupsExcludedImportTypes": [
+        "builtin"
+      ],
+      "newlines-between": "always-and-inside-groups",
+      "alphabetize": {
+        "order": "asc",
+        // "asc" 또는 "desc"
+        "caseInsensitive": true
       }
-    ]
-
-    // 다른 사용자 정의 규칙들 여기 추가
-  }
+    }
+  ]
 }

@@ -19,6 +19,12 @@ export interface ListApiResponse<T> {
   };
 }
 
+export interface DetailApiResponse<T> {
+  statusCode: number;
+  timestamp: Date;
+  data: T;
+}
+
 export interface Post {
   id: string;
   title: string;
@@ -113,9 +119,9 @@ class PostApiClient {
   }
 
   // 게시글 상세 조회
-  async getPostById(id: string): Promise<ApiResponse<Post>> {
+  async getPostById(id: string): Promise<DetailApiResponse<Post>> {
     try {
-      return await this.kyInstance.get(id).json<ApiResponse<Post>>();
+      return await this.kyInstance.get(id).json<DetailApiResponse<Post>>();
     } catch (error) {
       console.error("게시글 상세 조회 실패:", error);
       throw error;
