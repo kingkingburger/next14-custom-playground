@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import MainHeader from "@/components/navigation/main-header";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="kr">
-      <body className={`${inter.className} bg-gray-900`}>
+      <body className={cn(inter.className, "antialiased min-h-screen")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
