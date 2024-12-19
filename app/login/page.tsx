@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth/auth";
 import { useEffect } from "react";
 import Link from "next/link";
-import { useUserStore } from "@/store/user/userStore";
 
 const formSchema = z.object({
   email: z.string().email({ message: "이메일 형식을 입력해주세요" }),
@@ -29,7 +28,7 @@ type FormData = z.infer<typeof formSchema>;
 const LoginPage = () => {
   const router = useRouter();
   const { signIn, isAuthenticated } = useAuthStore();
-  const { getUser } = useUserStore();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
